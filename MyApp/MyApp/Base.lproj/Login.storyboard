@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Login View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController storyboardIdentifier="LoginViewControllerID" id="BYZ-38-t0r" customClass="LoginViewController" customModule="MyApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="QUICK SIGN IN WITH " lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ztc-ur-0Pk">
+                                <rect key="frame" x="193" y="50" width="214" height="26"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="21"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SdG-Oo-hfe" userLabel="FacebookBtn">
+                                <rect key="frame" x="36" y="254" width="528" height="50"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="19"/>
+                                <state key="normal" title="Facebook">
+                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="loginFaceBookTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="kXa-Ad-AlE"/>
+                                </connections>
+                            </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="ic_facebook_dark.png" translatesAutoresizingMaskIntoConstraints="NO" id="tLz-IY-oa4">
+                                <rect key="frame" x="36" y="255" width="40" height="50"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="40" id="gJJ-6Q-CD0"/>
+                                </constraints>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xzz-xe-4kZ" userLabel="TwitterBtn">
+                                <rect key="frame" x="36" y="323" width="528" height="50"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="Oew-iV-DKG"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="19"/>
+                                <state key="normal" title="Twitter">
+                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="loginTwitterTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="lMb-59-Yet"/>
+                                </connections>
+                            </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="ic_twitter_dark.png" translatesAutoresizingMaskIntoConstraints="NO" id="Ks5-5i-J3H" userLabel="ic_twitter">
+                                <rect key="frame" x="36" y="323" width="40" height="50"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="40" id="mZK-sf-gts"/>
+                                </constraints>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lgv-Uc-gQl" userLabel="GoogleBtn">
+                                <rect key="frame" x="36" y="394" width="528" height="50"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="20"/>
+                                <state key="normal" title="Google">
+                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="loginGoogleTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="gL5-aa-azD"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9xq-9X-M9a" userLabel="MicrosoftBtn">
+                                <rect key="frame" x="36" y="464" width="528" height="50"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="20"/>
+                                <state key="normal" title="Microsoft">
+                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="loginMicrosoftTouched:" destination="BYZ-38-t0r" eventType="touchUpInside" id="5df-96-5ww"/>
+                                </connections>
+                            </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="ic_microsoft_dark.png" translatesAutoresizingMaskIntoConstraints="NO" id="mQw-uG-vIS" userLabel="ic_microsoft">
+                                <rect key="frame" x="36" y="464" width="40" height="50"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="40" id="y4j-Kk-uzz"/>
+                                </constraints>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="ic_google_dark.png" translatesAutoresizingMaskIntoConstraints="NO" id="IAI-1T-sgV" userLabel="ic_google">
+                                <rect key="frame" x="36" y="394" width="40" height="50"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="40" id="ret-I1-dGN"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" red="0.077520370324546173" green="0.71545804344279817" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="IAI-1T-sgV" firstAttribute="centerY" secondItem="lgv-Uc-gQl" secondAttribute="centerY" id="3hE-JW-1PH"/>
+                            <constraint firstItem="IAI-1T-sgV" firstAttribute="height" secondItem="lgv-Uc-gQl" secondAttribute="height" id="3xU-L0-3Th"/>
+                            <constraint firstItem="Ztc-ur-0Pk" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="30" id="5mm-66-n9z"/>
+                            <constraint firstItem="SdG-Oo-hfe" firstAttribute="centerY" secondItem="tLz-IY-oa4" secondAttribute="centerY" id="9Lh-H3-1Xd"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Xzz-xe-4kZ" secondAttribute="trailing" constant="20" id="Cyc-Tg-hbU"/>
+                            <constraint firstItem="SdG-Oo-hfe" firstAttribute="leading" secondItem="tLz-IY-oa4" secondAttribute="leading" id="F26-7F-HDk"/>
+                            <constraint firstItem="Xzz-xe-4kZ" firstAttribute="centerX" secondItem="lgv-Uc-gQl" secondAttribute="centerX" id="Iai-h6-mDa"/>
+                            <constraint firstItem="SdG-Oo-hfe" firstAttribute="height" secondItem="Xzz-xe-4kZ" secondAttribute="height" id="JC1-Fq-aFF"/>
+                            <constraint firstItem="Xzz-xe-4kZ" firstAttribute="height" secondItem="9xq-9X-M9a" secondAttribute="height" id="JN2-n2-2wR"/>
+                            <constraint firstItem="Ks5-5i-J3H" firstAttribute="centerY" secondItem="Xzz-xe-4kZ" secondAttribute="centerY" id="PbM-3N-H0Y"/>
+                            <constraint firstItem="Xzz-xe-4kZ" firstAttribute="top" secondItem="SdG-Oo-hfe" secondAttribute="bottom" constant="19" id="PyJ-ug-InL"/>
+                            <constraint firstItem="lgv-Uc-gQl" firstAttribute="top" secondItem="Xzz-xe-4kZ" secondAttribute="bottom" constant="21" id="QZL-pf-GmC"/>
+                            <constraint firstItem="Ks5-5i-J3H" firstAttribute="height" secondItem="Xzz-xe-4kZ" secondAttribute="height" id="WP7-KX-eLZ"/>
+                            <constraint firstItem="mQw-uG-vIS" firstAttribute="centerY" secondItem="9xq-9X-M9a" secondAttribute="centerY" id="X4Q-7E-gU6"/>
+                            <constraint firstItem="Xzz-xe-4kZ" firstAttribute="centerX" secondItem="9xq-9X-M9a" secondAttribute="centerX" id="afj-Yx-c4d"/>
+                            <constraint firstAttribute="centerX" secondItem="Ztc-ur-0Pk" secondAttribute="centerX" id="dVD-w1-XaB"/>
+                            <constraint firstItem="Xzz-xe-4kZ" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="20" id="evF-gl-27q"/>
+                            <constraint firstItem="SdG-Oo-hfe" firstAttribute="centerX" secondItem="Xzz-xe-4kZ" secondAttribute="centerX" id="f93-Ms-7DU"/>
+                            <constraint firstItem="Xzz-xe-4kZ" firstAttribute="width" secondItem="lgv-Uc-gQl" secondAttribute="width" id="ikT-oL-CDC"/>
+                            <constraint firstItem="Xzz-xe-4kZ" firstAttribute="height" secondItem="lgv-Uc-gQl" secondAttribute="height" id="jKI-iZ-hgz"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="9xq-9X-M9a" secondAttribute="bottom" constant="86" id="k7W-WX-obG"/>
+                            <constraint firstItem="Ks5-5i-J3H" firstAttribute="leading" secondItem="Xzz-xe-4kZ" secondAttribute="leading" id="nC4-Hu-XQ5"/>
+                            <constraint firstItem="SdG-Oo-hfe" firstAttribute="height" secondItem="tLz-IY-oa4" secondAttribute="height" id="q2e-YW-4jl"/>
+                            <constraint firstItem="Xzz-xe-4kZ" firstAttribute="width" secondItem="9xq-9X-M9a" secondAttribute="width" id="qQA-sc-d9v"/>
+                            <constraint firstItem="mQw-uG-vIS" firstAttribute="leading" secondItem="9xq-9X-M9a" secondAttribute="leading" id="rfO-1f-nUY"/>
+                            <constraint firstItem="SdG-Oo-hfe" firstAttribute="width" secondItem="Xzz-xe-4kZ" secondAttribute="width" id="rmo-f3-x2S"/>
+                            <constraint firstItem="IAI-1T-sgV" firstAttribute="leading" secondItem="lgv-Uc-gQl" secondAttribute="leading" id="stY-8y-d0C"/>
+                            <constraint firstItem="mQw-uG-vIS" firstAttribute="height" secondItem="9xq-9X-M9a" secondAttribute="height" id="ucX-xT-vWV"/>
+                            <constraint firstItem="9xq-9X-M9a" firstAttribute="top" secondItem="lgv-Uc-gQl" secondAttribute="bottom" constant="20" id="xSV-G8-jX1"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="218" y="406"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="ic_facebook_dark.png" width="76" height="76"/>
+        <image name="ic_google_dark.png" width="76" height="76"/>
+        <image name="ic_microsoft_dark.png" width="76" height="76"/>
+        <image name="ic_twitter_dark.png" width="76" height="76"/>
+    </resources>
+</document>
