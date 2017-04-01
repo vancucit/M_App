@@ -74,10 +74,5 @@ class AuthToken: NSObject {
         provideStr = nil
         cacheUserToken()
     }
-    class func isCurrentUser(_ userID:String) -> Bool {
-        if(AuthToken.sharedInstance.currentUser!.idUser == userID){
-            return true
-        }
-        return false
-    }
+  
 }

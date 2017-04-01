@@ -3,7 +3,6 @@
 //  PipeFish
 //
 //  Created by Cuc Nguyen on 1/15/15.
-//  Copyright (c) 2015 CloudZilla. All rights reserved.
 //
 
 import Foundation
@@ -32,7 +31,7 @@ func NSDateTimeAgoLocalizedStrings(_ key: String) -> String {
 
 }
 func getDisplayDateTime(_ dateTime:Date?) -> String{
-    let timeZone = TimeZone(abbreviation: "UTC")
+    let timeZone = TimeZone.current
     let dateFormatter = DateFormatter()
     dateFormatter.timeZone = timeZone
     dateFormatter.dateFormat = "HH:mm a"
@@ -44,6 +43,21 @@ func getDisplayDateTime(_ dateTime:Date?) -> String{
         return ""
     }
 }
+
+func getDisplayDateTimeExpireOn(_ dateTime:Date?) -> String{
+    let timeZone = TimeZone.current
+    let dateFormatter = DateFormatter()
+    dateFormatter.timeZone = timeZone
+    dateFormatter.dateFormat = "dd/M/yyyy, H:mm"
+    if dateTime != nil {
+        let suffixStr =  dateFormatter.string(from: dateTime!)
+        return suffixStr
+//        return displayStr
+    }else{
+        return ""
+    }
+}
+
 func dateFromStringAndFormat(_ dateString:String, formatStr:String) -> Date?{
     let timeZone = TimeZone(abbreviation: "UTC")
     let dateFormatter = DateFormatter()
@@ -56,10 +70,14 @@ func dateWithISO8601String(_ dateString:String) -> Date?{
     let dateFormatter = DateFormatter()
     dateFormatter.timeZone = timeZone
     //2015-04-20T04:05:39.699+00:00
+    //2017-03-08T05:54:00Z
     //remove 3 last charater
     let stringDate = dateString
-
-    var realStr = (stringDate as NSString).substring(to: 22)
+    var realStr = stringDate
+    if stringDate.characters.count >= 22 {
+        realStr = (stringDate as NSString).substring(to: 22)
+    }
+    
     //find T and replac e'T'
     if realStr.range(of: "+") != nil {
         realStr = (realStr as NSString).substring(to: 19) + ".00"
@@ -80,6 +98,25 @@ func stringFromUTCTime(_ dateTime:Date) -> String?{
     dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
     return dateFormatter.string(from: dateTime)
 }
+
+func shortStringFromDate(_ dateTime:Date) -> String? {
+    let timeZone = TimeZone(abbreviation: "UTC")
+    let dateFormatter = DateFormatter()
+    dateFormatter.timeZone = timeZone
+    dateFormatter.dateFormat = "yyyy-MM-dd"
+    return dateFormatter.string(from: dateTime)
+}
+func shortDateFromString(_ dateString:String) -> Date? {
+    
+    let timeZone = TimeZone(abbreviation: "UTC")
+    let dateFormatter = DateFormatter()
+    dateFormatter.timeZone = timeZone
+    
+    
+    dateFormatter.dateFormat = "yyyy-MM-dd"
+    return dateFormatter.date(from: dateString)
+}
+
 extension Date {
     var timeAgo: String {
         

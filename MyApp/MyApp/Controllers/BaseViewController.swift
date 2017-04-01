@@ -42,10 +42,12 @@ class BaseViewController: UIViewController {
         self.navigationItem.leftBarButtonItem = btnLeft;
     }
     func showHideMenu(_ sender:AnyObject){
+        self.view.endEditing(true)
         self.mm_drawerController.toggle(MMDrawerSide.left, animated: true, completion: nil)
+
     }
     func backTouched(_ sender:AnyObject){
-        self.navigationController?.popViewController(animated: true)
+        let _ = self.navigationController?.popViewController(animated: true)
     }
     func delay(_ delay:Double, closure:@escaping ()->()) {
         DispatchQueue.main.asyncAfter(
@@ -126,6 +128,12 @@ class BaseViewController: UIViewController {
             self.showGeneralDialog()
         }
         
+    }
+    func showDialogOnConstruction(){
+        var popUp = UIAlertController()
+        popUp = UIAlertController(title: NSLocalizedString("Warning", comment: ""), message: NSLocalizedString("API on construction!", comment: ""), preferredStyle: UIAlertControllerStyle.alert)
+        popUp.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+        self.present(popUp, animated: true, completion: nil)
     }
     func showDialog(_ title: String,contentStr:String){
         var popUp = UIAlertController()

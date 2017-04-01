@@ -9,7 +9,9 @@
 import UIKit
 protocol ResponseViewDelegate{
     func willReloadTableView()
-    func willGoToResponseOriginal(_ challenger:Challenge)
+    func willGoToResponseOriginal(_ challengerID:String)
+    func willGoToResponseOriginalChallenger(_ challenger:Challenge)
+
     func willGotoCommentResponse(_ response:Response)
     func willGotoResponse(_ response:Response)
     func willGotoListUserLikeResponse(_ response:Response)
@@ -46,6 +48,7 @@ class ResponseView: UIView, SBPickerSelectorDelegate  {
     @IBOutlet weak var heightImgResponse: NSLayoutConstraint!
     @IBOutlet weak var heightContainResponseView: NSLayoutConstraint!
     
+    @IBOutlet weak var btnShare: UIButton!
     @IBOutlet weak var originalBtn: UIButton!
     var delegate:ResponseViewDelegate?
     
@@ -56,19 +59,29 @@ class ResponseView: UIView, SBPickerSelectorDelegate  {
             if isDetailView {
 
                 (UIScreen.main.bounds.size.width/2 - 20 )
-                widthItemConstrant.constant = (UIScreen.main.bounds.size.width/2 - 20 )
+//                widthItemConstrant.constant = (UIScreen.main.bounds.size.width/2 - 20 )
                 btnComment.isHidden = true
                 
             }else{
                 btnComment.isHidden = false
-                widthItemConstrant.constant = (UIScreen.main.bounds.size.width/3 - 20 )
+//                widthItemConstrant.constant = (UIScreen.main.bounds.size.width/3 - 20 )
             }
         }
     }
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        btnLike.cornerButton()
+        btnComment.cornerButton()
+        btnShare.cornerButton()
+        originalBtn.cornerButton()
+    }
     var response:Response!{
         didSet{
-            let userUrl = URL(string: response!.user!.avatar)
-            imgViewAvatar.sd_setImage(with: userUrl, placeholderImage: UIImage(named: "img_avatar_holder"))
+            if let urlStr  = response!.user!.getThumnailAvatar(){
+                let userUrl = URL(string: urlStr)
+                imgViewAvatar.sd_setImage(with: userUrl, placeholderImage: UIImage(named: "img_avatar_holder"))
+            }
+            
             
             lblUserName.text = response.user?.nameUser
 
@@ -105,7 +118,7 @@ class ResponseView: UIView, SBPickerSelectorDelegate  {
             btnNumComment.setTitle(String(response!.commentCount) + suffixCommentStr, for: UIControlState())
 
             if(response.isLikeByCurrentUser){
-                btnLike.backgroundColor = UIColor.gray
+                btnLike.backgroundColor = UIColor.lightGray
                 btnLike.isEnabled = false
             }else{
                 btnLike.backgroundColor = GlobalConstants.ColorConstant.DefaultSelectedColor
@@ -141,7 +154,7 @@ class ResponseView: UIView, SBPickerSelectorDelegate  {
         }
     }
     func heightOfResponseView()->CGFloat{
-        return self.heightContainResponseView.constant + 120
+        return self.heightContainResponseView.constant + 140
         //bottom is 200, top is 90
     }
 
@@ -162,9 +175,16 @@ class ResponseView: UIView, SBPickerSelectorDelegate  {
         
         delegate?.willSetPickerDelegate(picker)
     }
+    
     @IBAction func showOriginalChallengerTouched(_ sender: AnyObject) {
+        
         if (self.delegate != nil){
-            self.delegate?.willGoToResponseOriginal(response.challenger!)
+            if(response.challenger != nil){
+                self.delegate?.willGoToResponseOriginalChallenger(response.challenger!)
+            }else{
+            self.delegate?.willGoToResponseOriginal(response.challengerID!)
+            }
+            
         }
     }
     
@@ -181,16 +201,18 @@ class ResponseView: UIView, SBPickerSelectorDelegate  {
     
     
     @IBAction func btnNumCommentTouched(_ sender: AnyObject) {
+        
     }
     
     @IBAction func likeTouched(_ sender: AnyObject) {
         MBProgressHUD.showAdded(to: self.btnLike, animated: true)
         AppRestClient.sharedInstance.likeResponse(true, responseID: response.idResponse) { (success, error) -> () in
             if (success){
-                self.btnLike.backgroundColor = UIColor.gray
-                self.btnLike.isEnabled = false
-                self.response.isLikeByCurrentUser = true
+              
             }
+            self.btnLike.backgroundColor = UIColor.lightGray
+            self.btnLike.isEnabled = false
+            self.response.isLikeByCurrentUser = true
             MBProgressHUD.hideAllHUDs(for: self.btnLike, animated: true)
         }
     }

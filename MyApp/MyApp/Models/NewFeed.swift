@@ -9,11 +9,14 @@
 import UIKit
 
 class NewFeed: NSObject {
+    
     let Type_Response = "response"
     let Type_Challenge = "challenge"
     
+    
+    
     fileprivate var _type :String!
-    fileprivate var _item :AnyObject!
+     var _item :AnyObject!
     
     convenience init(objDic:NSDictionary){
         self.init()
@@ -42,4 +45,20 @@ class NewFeed: NSObject {
     func getItem() -> AnyObject{
         return _item
     }
+    class func createNewFeed(dict:[String:Any]) -> NewFeed{
+        let newFeed = NewFeed()
+        newFeed._type = "challenge"
+        
+        newFeed._item = Challenge(jsonDict: dict as NSDictionary)
+        
+        return newFeed
+        
+    }
+    
+//    init(obj:) {
+//        <#statements#>
+//    }
+//    convenience init(objDictTest:Dictionary){
+//        self.init()
+//    }
 }

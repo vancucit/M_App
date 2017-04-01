@@ -22,6 +22,7 @@ class LeftMenuTableViewCell: UITableViewCell {
     var menuItem:MenuItem! {
         didSet{
             imgViewIcon.image = UIImage(named: menuItem.imageURL)
+            imgViewIcon.contentMode = .scaleAspectFill
             lblTitle.text = menuItem.title
             if(menuItem.notificationNum.characters.count <= 0){
                 imgViewSquareIcon.isHidden = true

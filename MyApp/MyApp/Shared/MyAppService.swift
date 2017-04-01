@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+/*
 class MyAppService: NSObject ,MSFilter{
     class var sharedInstance : MyAppService {
         struct Static {
@@ -42,3 +42,4 @@ class MyAppService: NSObject ,MSFilter{
         print("test")
     }
 }
+*/

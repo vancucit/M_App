@@ -24,7 +24,8 @@ class User: NSObject,NSCoding {
     
     var idUser = ""
     var nameUser: String = ""
-    var avatar:String = ""
+    var avatar:String?
+    var email:String = ""
     var followerCount: Int = 0
     var followingCount: Int = 0
     var point:Int = 0
@@ -43,15 +44,25 @@ class User: NSObject,NSCoding {
     
     var jsonString:String?
 
-
-
+    func getThumnailAvatar() -> String? {
+        if let avatarUrl = self.avatar {
+            return avatarUrl + "?width=140&heigh=140"
+        }
+        return nil
+    }
+    func getAvatarUrl() -> String? {
+        if let avatarUrl = self.avatar {
+            return avatarUrl + "?width=200&heigh=200"
+        }
+        return nil
+    }
     override init() {
         super.init()
     }
     required init(coder aDecoder: NSCoder) {
         self.idUser = aDecoder.decodeObject(forKey: "id") as! String
         self.nameUser = aDecoder.decodeObject(forKey: "Name") as! String
-        self.avatar = aDecoder.decodeObject(forKey: "imageUrl") as! String
+        self.avatar = aDecoder.decodeObject(forKey: "imageUrl") as? String
         
         self.followerCount = aDecoder.decodeInteger(forKey: "Follower")
         self.followingCount = aDecoder.decodeInteger(forKey: "Following")
@@ -118,13 +129,25 @@ class User: NSObject,NSCoding {
     }
     
     func setUserFromDic( _ jsonDict:NSDictionary)->() {
-        nameUser = jsonDict["firstName"] as! String
-        idUser = jsonDict["email"] as! String
+        if let userNameStr = jsonDict["displayName"] as? String {
+            nameUser = userNameStr
+        }else{
+            nameUser = jsonDict["userDisplayName"] as! String
+        }
+        if let intUser = jsonDict["id"] as? Int {
+            idUser = String(intUser)
+        }
+        
+//        idUser = "2"
+//        email = jsonDict["email"] as! String
 //        idUser = jsonDict["id"] as! String
 //        nameUser = jsonDict["Name"] as! String
-        avatar = jsonDict["imageUrl"] as! String
-//        followerCount = jsonDict["Follower"] as! Int
-//        followingCount = jsonDict["Following"] as! Int
+        if let avatarStr = jsonDict["imageUrl"] as? String {
+            avatar = avatarStr
+        }
+        
+        followerCount = jsonDict["followersCount"] as! Int
+        followingCount = jsonDict["followingCount"] as! Int
 //        point = jsonDict["Point"] as! Int
 //        currentRank = jsonDict["CurrentRank"] as! Int
 //        completedChallenges = jsonDict["CompletedChallenges"] as! Int
@@ -136,7 +159,10 @@ class User: NSObject,NSCoding {
 //        
 //        birthDate = jsonDict["Birthdate"] as? String
 //        gender = jsonDict["Gender"] as? String
-//        isFollowing = jsonDict["IsFollowedByCurrentUser"] as! Bool
+        if let hasFollow = jsonDict["isFollow"] as? Bool{
+            isFollowing = hasFollow
+        }
+        
 //        isFollowwer = jsonDict["IsFollowerOfCurrentUser"] as! Bool
     }
     func toggleIsFollowedByCurrentUser(){
@@ -171,6 +197,7 @@ extension User{
         return false
     }
     
+    
 
     
     class func getUserNameCache() -> String?{
@@ -189,4 +216,10 @@ extension User{
         User.saveToken("")
     }
     
+    class func isCurrentUser(_ userID:String) -> Bool {
+        if(User.shareInstance.idUser == userID){
+            return true
+        }
+        return false
+    }
 }

@@ -37,7 +37,7 @@ class FollowViewController: BaseViewController,UITableViewDelegate, UITableViewD
         }else{
             typeFollowSegment.selectedSegmentIndex = 2
         }
-        self.showMenuButton()
+//        self.showMenuButton()
 
         tableView.tableFooterView = nil
         tableView.separatorColor = UIColor.clear
@@ -64,17 +64,19 @@ class FollowViewController: BaseViewController,UITableViewDelegate, UITableViewD
 
         if (typeFollow == .RequestType){
             //
-            AppRestClient.sharedInstance.getPendingFollowers(currentPageIndex, keyword:"",  callback: { (usersLoad, error) -> () in
-                //
-                if (usersLoad != nil){
-                    self.currentPageIndex += 1
-                    self.users += usersLoad!
-                    self.hasLoadMore = usersLoad!.count == AppRestClient.sharedInstance.Page_Count
-                    self.tableView.reloadData()
-                }
-                self.hideHudLoadingInView(self.tableView)
-                self.isLoading = false
-            })
+//            AppRestClient.sharedInstance.getPendingFollowers(currentPageIndex, keyword:"",  callback: { (usersLoad, error) -> () in
+//                //
+//                if (usersLoad != nil){
+//                    self.currentPageIndex += 1
+//                    self.users += usersLoad!
+//                    self.hasLoadMore = usersLoad!.count == AppRestClient.sharedInstance.Page_Count
+//                    self.tableView.reloadData()
+//                }
+//                self.hideHudLoadingInView(self.tableView)
+//                self.isLoading = false
+//            })
+            self.hideHudLoadingInView(self.tableView)
+            self.showDialogOnConstruction()
             
         }else{
             var following = true
@@ -82,7 +84,7 @@ class FollowViewController: BaseViewController,UITableViewDelegate, UITableViewD
                 following = false
             }
             
-            AppRestClient.sharedInstance.getFollows(AuthToken.sharedInstance.currentUser!.idUser, page:currentPageIndex, keyword:"", getFollowing:following,  callback: { (usersLoad, error) -> () in
+            AppRestClient.sharedInstance.getFollows(User.shareInstance.idUser, page:currentPageIndex, keyword:"", getFollowing:following,  callback: { (usersLoad, error) -> () in
                 //
                 if (usersLoad != nil){
                     self.currentPageIndex += 1

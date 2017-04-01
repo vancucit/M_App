@@ -35,11 +35,12 @@ class ResponseTableViewCell: UITableViewCell {
         let selectionColor = UIView()
         selectionColor.backgroundColor = GlobalConstants.ColorConstant.DefaultSelectedColor
         self.selectedBackgroundView = selectionColor
-        
+        /*
         containChallengeView.layer.borderColor = UIColor.gray.cgColor
         containChallengeView.layer.borderWidth = 1.0
         containChallengeView.layer.cornerRadius = 1.0
         containChallengeView.clipsToBounds = true
+        */
         
         containResponseView.layer.borderColor = UIColor.gray.cgColor
         containResponseView.layer.borderWidth = 1.0
@@ -80,12 +81,14 @@ class ResponseTableViewCell: UITableViewCell {
             make.right.equalTo(self.containResponseView).offset(0)
             make.bottom.equalTo(self.containResponseView).offset(0)
         })
+ 
         self.challengeView.snp_makeConstraints({ (make) -> Void in
             make.top.equalTo(self.containChallengeView).offset(0)
             make.left.equalTo(self.containChallengeView).offset(0)
             make.right.equalTo(self.containChallengeView).offset(0)
             make.bottom.equalTo(self.containChallengeView).offset(0)
         })
+ 
     }
 
 }

@@ -18,12 +18,11 @@ class LoginViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        if(isNeedGetConfiguration){
-//            self.getConfigurationService()
-//        }
 
-        //checkAuthenticate
-        //
+        checkAuthenticate()
+        
+    }
+    func checkAuthenticate(){
         if (User.getToken() != nil){
             print(" user tokenn \(User.getToken()!)")
             self.showHudWithString("")
@@ -33,34 +32,23 @@ class LoginViewController: BaseViewController {
                     self.gotoMainScreen()
                 }else{
                     User.logOut()
+                    self.loginFaceBookTouched(self)
+
                 }
             })
+        }else{
+
+            self.delay(0.5, closure: { 
+                self.loginFaceBookTouched(self)
+            })
+            
         }
-        
     }
+    
     func getConfigurationService(){
         self.showHudWithString("")
 
-        MyAppService.sharedInstance.getConfigurationService { (success, error) -> () in
-            if(success){
-                if(AuthToken.sharedInstance.resoreAuthToken()){
-                    AppRestClient.sharedInstance.checkAuthentication(AuthToken.sharedInstance.authenticationToken!, callback: { (sucess, error) -> () in
-                        self.hideHudLoading()
-                        if (sucess){
-                            self.gotoMainScreen()
-                        }else{
-                            AuthToken.sharedInstance.logout()
-                        }
-                    })
-                }else{
-                    self.hideHudLoading()                    
-                }
-            }else{
-                self.showDialog("Service error", contentStr: "Can't get information service")
-                self.hideHudLoading()
-            }
-
-        }
+       
     }
 
     override func didReceiveMemoryWarning() {
@@ -75,12 +63,15 @@ class LoginViewController: BaseViewController {
             self.loginWithFacebookToken()
             
         }else{
+            
             fbloginManager.logIn(withReadPermissions: ["public_profile", "email", "user_friends"], from: self) { (
                 result, error) in
                 
                 if FBSDKAccessToken.current() != nil {
                     print("has login \(FBSDKAccessToken.current().tokenString)")
                     self.loginWithFacebookToken()
+                }else{
+                    self.hideHudLoading()
                 }
             }    
         }
@@ -92,7 +83,8 @@ class LoginViewController: BaseViewController {
             AppRestClient.sharedInstance.loginWithFacebook(currentToken, callback: { (success, error) in
                 if success {
                     print("login success")
-                    self.gotoMainScreen()
+//                    self.gotoMainScreen()
+                    self.checkAuthenticate()
                 }else{
                     print("error")
                     self.showDialogError(error?.description)
@@ -122,32 +114,7 @@ class LoginViewController: BaseViewController {
         appDelegate.goToMainViewController()
     }
     func loginWithKeyword(_ provide:String){
-        if(MyAppService.sharedInstance.client != nil){
-            self.showHudWithString("")
-//            self.myAppSerice.client?.l
-           let controller =  MyAppService.sharedInstance.client?.loginViewController(withProvider: provide, completion: { (user, error) -> Void in
-            if(error == nil && user != nil){
-                let uuidDevice = UIDevice.current.identifierForVendor?.uuidString
-                AppRestClient.sharedInstance.login(uuidDevice!, providestr: provide, user: user!, callback: { (success, error) -> () in
-                    self.hideHudLoading()
-                    if(success){
-                        self.gotoMainScreen()
-                    }else{
-                        self.showDialog("Error", contentStr: "Login failed. Try again")
-                    }
-                    
-                })
-            }else{
-                self.hideHudLoading()
-
-                self.showGeneralDialog()
-            }
-            self.dismiss(animated: true, completion: nil)
-            })
-            self.present(controller!, animated: true, completion: nil)
-        }else{
-//            self.getConfigurationService()
-        }
+        
     }
 }
 

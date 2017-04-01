@@ -8,6 +8,10 @@
 
 import UIKit
 
+let TIME_DAY: Int = 10
+protocol SendMessageDelegate :NSObjectProtocol{
+    func didSendNewMessage()
+}
 class SendMessageViewController: BaseKeyboardViewController, UITableViewDelegate, UITableViewDataSource , UITextViewDelegate{
     let KeyBoarHeight:CGFloat = 216
     @IBOutlet weak var txtExpireValue: UITextField!
@@ -16,6 +20,7 @@ class SendMessageViewController: BaseKeyboardViewController, UITableViewDelegate
     
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var topView: UIView!
+    
     var tableViewUser:UITableView!
     var contactPicker:THContactPickerView!
     
@@ -25,18 +30,20 @@ class SendMessageViewController: BaseKeyboardViewController, UITableViewDelegate
     var hasMoreFriends = true
     var imageSend:UIImage?
     
+    weak var delegate:SendMessageDelegate?
+    
     //picker timer
-    let pickerTimer:[[String: String]] = [["1 hour":"OneHour"], ["2 hours":"TwoHours"], ["3 hours":"ThreeHours"], ["4 hours":"FourHours"], ["5 hours":"FiveHours"], ["10 hours":"TenHours"], ["15 hours":"FifteenHours"], ["20 hours":"TwentyHours"], ["1 day":"OneDays"], ["2 days":"TwoDays"], ["3 days":"TheeDays"], ["4 days":"FourDays"], ["5 days":"FiveDays"], ["6 days":"SixDays"], ["1 week":"OneWeek"], ["2 weeks":"TwoWeeks"], ["3 weeks":"ThreeWeeks"], ["1 month":"OneMonth"]]
+    let pickerTimer:[[String: Int]] = [["1 hour":1], ["2 hours":2], ["3 hours":3], ["4 hours":4], ["5 hours":5], ["10 hours":10], ["15 hours":15], ["20 hours":20], ["1 day":TIME_DAY], ["2 days":TIME_DAY*2], ["3 days":TIME_DAY*3], ["4 days":TIME_DAY*4], ["5 days":TIME_DAY*5], ["6 days":TIME_DAY * 6], ["1 week":TIME_DAY * 7], ["2 weeks": TIME_DAY * 7 * 2], ["3 weeks":TIME_DAY * 7 * 3], ["1 month":TIME_DAY * 30]]
 
     var pickerView:UIPickerView!
     override func viewDidLoad() {
         super.viewDidLoad()
         self.addPickerExpire()
         //create top view
-        contactPicker = THContactPickerView(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 140))
+        contactPicker = THContactPickerView(frame: CGRect(x: 10, y: 0, width: self.view.frame.size.width - 20, height: 140))
         contactPicker.setPlaceholderString("Type contact name")
         contactPicker.delegate = self
-        scrollView.addSubview(contactPicker)
+        self.topView.addSubview(contactPicker)
         scrollView.delegate = self
         
         txtViewContent.delegate = self
@@ -55,17 +62,21 @@ class SendMessageViewController: BaseKeyboardViewController, UITableViewDelegate
 
         txtViewContent.placeholder = "Challenger description . Max 240 chars"
         showChallengeNavigationBar()
+        
+        for user in self.userSelected {
+            self.addContactToPicker(user)
+        }
     }
     func updateTableViewUserFrame(){
-        tableViewUser.frame = CGRect(x: 0,y: 64, width: self.view.frame.size.width, height: self.view.frame.size.height - KeyBoarHeight - contactPicker.frame.size.height - 64)
+        tableViewUser.frame = CGRect(x: 0,y: 64, width: self.view.frame.size.width, height: self.view.frame.size.height - KeyBoarHeight - contactPicker.frame.size.height)
 
     }
     func showChallengeNavigationBar(){
-//        self.setRightNavigationWithImage("ic_send", action: "sendChallengerTouched:")
+        self.setRightNavigationWithImage("ic_send_36pt", action: #selector(SendMessageViewController.sendChallengerTouched(_:)))
     }
     func showHiddenContactNavigatonBar(){
 
-//        self.setRigtNavigationWithTitle("Done", action: "hiddenPickeTouched:")
+        self.setRigtNavigationWithTitle("Done", action: #selector(SendMessageViewController.hiddenPickeTouched(_:)))
     }
     //MARK: IBAaction
     func hiddenPickeTouched(_ sender:AnyObject!){
@@ -83,7 +94,7 @@ class SendMessageViewController: BaseKeyboardViewController, UITableViewDelegate
         if(imageSend != nil){
             
         }else{
-            var endTime = ""
+            var endTime: Int = 1
             for dictTime in pickerTimer {
                 let keyStr = Array(dictTime.keys)[0]
                 
@@ -94,14 +105,20 @@ class SendMessageViewController: BaseKeyboardViewController, UITableViewDelegate
             }
 //            forin
             self.showHudWithString("")
-            AppRestClient.sharedInstance.sendChallenge("", description: txtViewContent.text, endDate: endTime, participants: userSelected, isPublic: switchPrivateChallenger.isSelected, callback: { (success, error) -> () in
+            weak var thisSelf = self
+            AppRestClient.sharedInstance.sendChallenge("", descriptionStr: txtViewContent.text, endDate: endTime, participants: userSelected, isPublic: !switchPrivateChallenger.isOn, callback: { (success, error) -> () in
                 //
-                if(success){
-                    self.txtViewContent.text = ""
-                    self.navigationController?.popViewController(animated: true)
-                }else{
-                    self.showDialog("", contentStr: "Send challenge failed. Try again.")
-                }
+                DispatchQueue.main.async(execute: {
+                    if(success){
+                        thisSelf?.delegate?.didSendNewMessage()
+                        thisSelf?.txtViewContent.text = ""
+                        thisSelf?.navigationController?.popViewController(animated: true)
+                        
+                    }else{
+                        thisSelf?.showDialog("", contentStr: "Send challenge failed. Try again.")
+                    }
+                })
+              
                 self.hideHudLoading()
             })
         }
@@ -120,7 +137,16 @@ class SendMessageViewController: BaseKeyboardViewController, UITableViewDelegate
                 if(userLoads != nil){
                     self.friendPageIndex += 1
                     self.hasMoreFriends = userLoads!.count == AppRestClient.sharedInstance.Page_Count
-                    self.userFriends += userLoads!
+                    for aUser in userLoads! {
+                        if User.shareInstance.idUser != aUser.idUser {
+                            if let currentSelectedUser = self.hasExistSelectedUser(userID: aUser.idUser){
+                                self.userFriends.append(currentSelectedUser)
+                            }else{
+                                self.userFriends.append(aUser)
+                            }
+                        }
+                        
+                    }
                 }
                 self.tableViewUser.reloadData()
                 
@@ -130,8 +156,20 @@ class SendMessageViewController: BaseKeyboardViewController, UITableViewDelegate
         
     }
 
-   
-    
+    func hasExistSelectedUser(userID:String) -> User? {
+      
+        for aUser in self.userSelected {
+            if aUser.idUser == userID {
+                return aUser
+            }
+        }
+        return nil
+    }
+    func addContactToPicker(_ user:User){
+        contactPicker.addContact(user, withName: user.nameUser)
+        userSelected.append(user)
+
+    }
     
     //MARK: - UITableViewDelegate, UITableViewDatasource
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -140,11 +178,12 @@ class SendMessageViewController: BaseKeyboardViewController, UITableViewDelegate
         var checkboxImageView = cell.viewWithTag(104) as! UIImageView
 
         var user = userFriends[indexPath.row]
+        
         let indexUser = self.userSelected.index(of: user)
         if(indexUser == nil){
-            contactPicker.addContact(user, withName: user.nameUser)
+            self.addContactToPicker(user)
             checkboxImageView.image = UIImage(named: "icon-checkbox-selected-green-25x25")
-            userSelected.append(user)
+
 
         }else{
             self.userSelected.removeObject(object: user)
@@ -158,18 +197,23 @@ class SendMessageViewController: BaseKeyboardViewController, UITableViewDelegate
         let cell = tableView.dequeueReusableCell(withIdentifier: "ContactCell", for: indexPath) as! THContactPickerTableViewCell
         
         // Get the UI elements in the cell;
-        var contactNameLabel = cell.viewWithTag(101) as! UILabel
-        var contactImage = cell.viewWithTag(103) as! UIImageView
-        var checkboxImageView = cell.viewWithTag(104) as! UIImageView
+        let contactNameLabel = cell.viewWithTag(101) as! UILabel
+        let contactImage = cell.viewWithTag(103) as! UIImageView
+        let checkboxImageView = cell.viewWithTag(104) as! UIImageView
         
-        var user = userFriends[indexPath.row]
+        let user = userFriends[indexPath.row]
         contactNameLabel.text = user.nameUser
-        var userUrl = URL(string:user.avatar)
-        contactImage.sd_setImage(with: userUrl, placeholderImage:  UIImage(named: "img_avatar_holder"))
-        var indexUser = self.userSelected.index(of: user)
+        
+        if let userStr = user.getThumnailAvatar() {
+            contactImage.sd_setImage(with: URL(string: userStr), placeholderImage: UIImage(named: "img_avatar_holder"))
+            
+        }else{
+            contactImage.image = UIImage(named: "img_avatar_holder")
+        }
+        
+        let indexUser = self.userSelected.index(of: user)
         if(indexUser != nil){
             checkboxImageView.image = UIImage(named: "icon-checkbox-selected-green-25x25")
-
         }else{
             checkboxImageView.image = UIImage(named: "icon-checkbox-unselected-25x25")
 
@@ -230,15 +274,16 @@ class SendMessageViewController: BaseKeyboardViewController, UITableViewDelegate
         if(showsKeyboard){
             let userInfo = notification.userInfo!
             if let rectKB = (userInfo[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-                var contentInsets = UIEdgeInsetsMake(64, 0, rectKB.height, 0)
+                var contentInsets = UIEdgeInsetsMake(0, 0, rectKB.height, 0)
                 scrollView.contentInset = contentInsets
                 scrollView.scrollIndicatorInsets = contentInsets
                 var rect = txtViewContent.bounds
                 rect = txtViewContent.convert(rect, to: scrollView)
+                
                 scrollView.scrollRectToVisible(rect, animated: true)
             }
         }else{
-            scrollView.contentInset = UIEdgeInsetsMake(64, 0, 0, 0)
+            scrollView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0)
             
             scrollView.scrollIndicatorInsets = UIEdgeInsets.zero
         }
@@ -261,7 +306,7 @@ extension SendMessageViewController: UIPickerViewDelegate, UIPickerViewDataSourc
 //    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String! {
 //    }
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        var dicPick = pickerTimer[row]
+        let dicPick = pickerTimer[row]
         txtExpireValue.text = Array(dicPick.keys)[0]
     }
 

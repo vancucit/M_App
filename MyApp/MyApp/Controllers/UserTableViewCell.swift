@@ -30,7 +30,13 @@ class UserTableViewCell: UITableViewCell {
             }
             lblFollowNumber.text = String(user.followingCount) + followingStr + String(user.followerCount) + followerStr
             
-            imgAvatar.sd_setImage(with: URL(string: user.avatar), placeholderImage: UIImage(named: "img_avatar_holder"))
+            if let userStr = user.getThumnailAvatar() {
+                imgAvatar.sd_setImage(with: URL(string: userStr), placeholderImage: UIImage(named: "img_avatar_holder"))
+                
+            }else{
+                imgAvatar.image = UIImage(named: "img_avatar_holder")
+            }
+//            imgAvatar.sd_setImage(with: URL(string: user.getThumnailAvatar()!), placeholderImage: UIImage(named: "img_avatar_holder"))
         }
     }
     override func awakeFromNib() {

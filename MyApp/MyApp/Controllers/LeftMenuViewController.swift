@@ -27,8 +27,7 @@ class LeftMenuViewController: BaseViewController , UITableViewDelegate, UITableV
     @IBOutlet weak var lblUserName: UILabel!
     var menuItems = [MenuItem]()
     var notificationItem:MenuItem!
-    var followerItem:MenuItem!
-    var followwingItem:MenuItem!
+   
     
     var isFirtTime = true
     override func viewDidLoad() {
@@ -57,18 +56,30 @@ class LeftMenuViewController: BaseViewController , UITableViewDelegate, UITableV
         avatarImgView.addGestureRecognizer(avatarTapGesture)
         
         updateLeftItem()
+        
+        self.tableView.selectRow(at: IndexPath(row: 0, section: 0), animated: false, scrollPosition: .none)
+
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.view.endEditing(true)
     }
     func updateLeftItem(){
         
-        menuItems.append(MenuItem(title: "News", imageURL: "ic_news", notificationNum: ""))
+        menuItems.append(MenuItem(title: "Home", imageURL: "ic_news", notificationNum: ""))
         
         notificationItem = MenuItem(title: "Notifications", imageURL: "ic_notification", notificationNum: "0")
-        followwingItem = MenuItem(title: "Followings", imageURL: "ic_followings", notificationNum: "0")
-        followerItem = MenuItem(title: "Followers", imageURL: "ic_followers", notificationNum: "0")
+//        followwingItem = MenuItem(title: "Followings", imageURL: "ic_followings", notificationNum: "0")
+//        followerItem = MenuItem(title: "Followers", imageURL: "ic_followers", notificationNum: "0")
 
-        menuItems.append(notificationItem)
-        menuItems.append(followerItem)
+        var followwingItem:MenuItem!
+        var requestItem:MenuItem!
+        
+        followwingItem = MenuItem(title: "Followings", imageURL: "ic_followings", notificationNum: "")
         menuItems.append(followwingItem)
+        
+        requestItem = MenuItem(title: "Request", imageURL: "ic_followings", notificationNum: "")
+        menuItems.append(requestItem)
         
         menuItems.append(MenuItem(title: "Profile", imageURL: "ic_profile", notificationNum: ""))
         menuItems.append(MenuItem(title: "Scoreboard", imageURL: "ic_score_w", notificationNum: ""))
@@ -76,13 +87,17 @@ class LeftMenuViewController: BaseViewController , UITableViewDelegate, UITableV
             menuItems.append(MenuItem(title: "Invite friends", imageURL: "ic_envelop_w", notificationNum: ""))
         }
         menuItems.append(MenuItem(title: "Settings", imageURL: "ic_settings", notificationNum: ""))
+//        menuItems.append(notificationItem)
+
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        if let userUrlStr = User.shareInstance.getAvatarUrl() {
+            let userUrl = URL(string: userUrlStr)
+            avatarImgView.sd_setImage(with: userUrl, placeholderImage:  UIImage(named: "img_avatar_holder"))
+        }
         
-        var userUrl = URL(string: User.shareInstance.avatar)
-        avatarImgView.sd_setImage(with: userUrl, placeholderImage:  UIImage(named: "img_avatar_holder"))
         lblUserName.text = User.shareInstance.nameUser
         
 //        getNumNotifcation()
@@ -95,8 +110,8 @@ class LeftMenuViewController: BaseViewController , UITableViewDelegate, UITableV
         AppRestClient.sharedInstance.getBadgeCount { (badgeCount, error) -> () in
             if (badgeCount != nil){
                 self.notificationItem.notificationNum = String(badgeCount!.getNotification())
-                self.followwingItem.notificationNum = String(badgeCount!.getFllowing())
-                self.followerItem.notificationNum = String(badgeCount!.getFollower())
+//                self.followwingItem.notificationNum = String(badgeCount!.getFllowing())
+//                self.followerItem.notificationNum = String(badgeCount!.getFollower())
                 self.tableView.reloadData()
             }else{
                 
@@ -109,7 +124,8 @@ class LeftMenuViewController: BaseViewController , UITableViewDelegate, UITableV
     }
     func avatarTouched(_ sender:AnyObject){
         print("will implement goto profile")
-        let myProfileVC = storyboard!.instantiateViewController(withIdentifier: "MyProfileViewControllerID") as! MyProfileViewController;
+        let storyboard = UIStoryboard(name: "Users", bundle: nil)
+        let myProfileVC = storyboard.instantiateViewController(withIdentifier: "MyProfileViewControllerID") as! MyProfileViewController;
         let navProfileVC = UINavigationController(rootViewController: myProfileVC)
         self.present(navProfileVC, animated: true, completion: nil)
 
@@ -125,56 +141,60 @@ class LeftMenuViewController: BaseViewController , UITableViewDelegate, UITableV
         print("didSelectRow at index \(indexPath.row)")
         switch indexPath.row{
         case 0:
-            let newVC = storyboard!.instantiateViewController(withIdentifier: "NewsViewControllerID") as! NewsViewController;
+            let newVC = storyboard!.instantiateViewController(withIdentifier: "NewsViewControllerID") as! NewsViewController
+            newVC.currentNewFeedType = NewsType.News
             let naVC = UINavigationController(rootViewController: newVC)
             self.mm_drawerController.setCenterView(naVC, withCloseAnimation: true, completion: nil)
             break
+       
         case 1:
-            let notificationVC = storyboard!.instantiateViewController(withIdentifier: "NotificationViewControllerID") as! NotificationViewController
-            let naVC = UINavigationController(rootViewController: notificationVC)
+            let newVC = storyboard!.instantiateViewController(withIdentifier: "NewsViewControllerID") as! NewsViewController
+            newVC.currentNewFeedType = NewsType.Following
+            let naVC = UINavigationController(rootViewController: newVC)
             self.mm_drawerController.setCenterView(naVC, withCloseAnimation: true, completion: nil)
             break
-       
         case 2:
-            let followVC = storyboard!.instantiateViewController(withIdentifier: "FollowViewControllerID") as! FollowViewController;
-            var naVC = UINavigationController(rootViewController: followVC)
-            followVC.typeFollow = TypeFollowStr.FollwerType
+            let newVC = storyboard!.instantiateViewController(withIdentifier: "NewsViewControllerID") as! NewsViewController
+            newVC.currentNewFeedType = NewsType.NewChallenger
+            let naVC = UINavigationController(rootViewController: newVC)
             self.mm_drawerController.setCenterView(naVC, withCloseAnimation: true, completion: nil)
             break
         case 3:
-            let followVC = storyboard!.instantiateViewController(withIdentifier: "FollowViewControllerID") as! FollowViewController;
-            var naVC = UINavigationController(rootViewController: followVC)
-            followVC.typeFollow = TypeFollowStr.FollowingType
+            let storyboard = UIStoryboard(name: "Users", bundle: nil)
+            let myProfileVC = storyboard.instantiateViewController(withIdentifier: "MyProfileViewControllerID") as! MyProfileViewController;
+            myProfileVC.isShowMenuHome = true
+            let naVC = UINavigationController(rootViewController: myProfileVC)
             self.mm_drawerController.setCenterView(naVC, withCloseAnimation: true, completion: nil)
             break
         case 4:
-            let myProfileVC = storyboard!.instantiateViewController(withIdentifier: "MyProfileViewControllerID") as! MyProfileViewController;
-            myProfileVC.isShowMenuHome = true
-            var naVC = UINavigationController(rootViewController: myProfileVC)
+            let scoreBoardVC = storyboard!.instantiateViewController(withIdentifier: "ScoreboardViewControllerID") as! ScoreboardViewController;
+            let naVC = UINavigationController(rootViewController: scoreBoardVC)
             self.mm_drawerController.setCenterView(naVC, withCloseAnimation: true, completion: nil)
             break
         case 5:
-            let scoreBoardVC = storyboard!.instantiateViewController(withIdentifier: "ScoreboardViewControllerID") as! ScoreboardViewController;
-            var naVC = UINavigationController(rootViewController: scoreBoardVC)
-            self.mm_drawerController.setCenterView(naVC, withCloseAnimation: true, completion: nil)
-            break
-        case 6:
             if(AuthToken.sharedInstance.provideStr != "facebook"){
                 let settingsVC = storyboard!.instantiateViewController(withIdentifier: "SettingViewControllerID") as! SettingViewController;
-                var naVC = UINavigationController(rootViewController: settingsVC)
+                let naVC = UINavigationController(rootViewController: settingsVC)
                 self.mm_drawerController.setCenterView(naVC, withCloseAnimation: true, completion: nil)
                 break
             }else{
                 //show invite friend 
                 self.inviteApp()
             }
-        case 7:
+        case 6:
             if(AuthToken.sharedInstance.provideStr == "facebook"){
                 let settingsVC = storyboard!.instantiateViewController(withIdentifier: "SettingViewControllerID") as! SettingViewController;
-                var naVC = UINavigationController(rootViewController: settingsVC)
+                let naVC = UINavigationController(rootViewController: settingsVC)
                 self.mm_drawerController.setCenterView(naVC, withCloseAnimation: true, completion: nil)
                 break
             }
+        case 7:
+            let notificationVC = storyboard!.instantiateViewController(withIdentifier: "NotificationViewControllerID") as! NotificationViewController
+            let naVC = UINavigationController(rootViewController: notificationVC)
+            self.mm_drawerController.setCenterView(naVC, withCloseAnimation: true, completion: nil)
+            
+            break
+            
         default:
             self.mm_drawerController.toggle(MMDrawerSide.left, animated: true, completion: nil)
             break
@@ -214,8 +234,8 @@ class LeftMenuViewController: BaseViewController , UITableViewDelegate, UITableV
         if((FBSDKAccessToken.current()) != nil){
             FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, name, first_name, last_name, picture.type(large), email"]).start(completionHandler: { (connection, result, error) -> Void in
                 if (error == nil){
-                    var dict = result as! NSDictionary
-                    print(result)
+                    let dict = result as! NSDictionary
+                    print(result ?? "--")
                     print(dict)
                     NSLog((dict.object(forKey: "picture") as AnyObject).object(forKey: "data")?.object(forKey: "url") as! String)
                 }

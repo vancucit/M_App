@@ -8,7 +8,9 @@
 
 import UIKit
 
-class CompletedResponseViewController: BaseViewController,UITableViewDelegate, UITableViewDataSource, ResponseViewDelegate {
+class CompletedResponseViewController: BaseViewController {
+    
+
 
     @IBOutlet weak var tableView: UITableView!
     var userID:String!
@@ -51,13 +53,69 @@ class CompletedResponseViewController: BaseViewController,UITableViewDelegate, U
         }
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
+
 
     
+    
+    
+//    func calculateHeightForConfiguredSizingCell(sizingCell:CompletedTableViewCell) -> CGFloat{
+//    
+//        return size.height + 1.0
+//    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return responses.count
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        if (isLoading == false && scrollView.isDragging == false && scrollView.isDecelerating == false){
+            if(hasMore){
+                if(scrollView.contentSize.height - scrollView.frame.size.height <= scrollView.contentOffset.y){
+                    self.retrieveData()
+                }
+            }
+        }
+    }
+    //MARK: ResponseViewDelegate
+    func willReloadTableView(){
+        self.tableView.beginUpdates()
+        self.tableView.endUpdates()
+    }
+   
+    
+    func willSetPickerDelegate(_ picker:SBPickerSelector){
+        picker.showPickerOver(self)
+    }
+}
+extension CompletedResponseViewController: ResponseViewDelegate{
+    func willGoToResponseOriginal(_ challengerID: String) {
+        
+    }
+    
+    func willGoToResponseOriginalChallenger(_ challenger:Challenge){
+        let responseDetailVC = storyboard!.instantiateViewController(withIdentifier: "ChallengeDetailViewControllerID") as! ChallengeDetailViewController
+        responseDetailVC.challenge = challenger
+        self.navigationController?.pushViewController(responseDetailVC, animated: true)
+    }
+    func willGotoResponse(_ response: Response) {
+        let responseDetailVC = storyboard!.instantiateViewController(withIdentifier: "ResponseDetailViewControllerID") as! ResponseDetailViewController
+        responseDetailVC.response = response
+        self.navigationController?.pushViewController(responseDetailVC, animated: true)
+    }
+    func willGotoCommentResponse(_ response: Response) {
+        let responseDetailVC = storyboard!.instantiateViewController(withIdentifier: "ResponseDetailViewControllerID") as! ResponseDetailViewController
+        responseDetailVC.response = response
+        responseDetailVC.isNeedShowComment = true
+        self.navigationController?.pushViewController(responseDetailVC, animated: true)
+    }
+    func willGotoListUserLikeResponse(_ response: Response) {
+        //
+    }
+    func willShareResponse(_ response: Response) {
+        //
+    }
+}
+extension CompletedResponseViewController:UITableViewDelegate, UITableViewDataSource{
     //MARK - UITableViewDelegate, UITableViewDatasource
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let responseDetailVC = storyboard!.instantiateViewController(withIdentifier: "ResponseDetailViewControllerID") as! ResponseDetailViewController
@@ -70,7 +128,7 @@ class CompletedResponseViewController: BaseViewController,UITableViewDelegate, U
         let cell = tableView.dequeueReusableCell(withIdentifier: "CompletedTableViewCellID", for: indexPath) as! CompletedTableViewCell
         
         self.configTableViewCellAtIndex(cell, indexPath: indexPath)
-
+        
         if (cellCache.count <= indexPath.row){
             cellCache.insert(cell, at: indexPath.row)
         }
@@ -97,55 +155,5 @@ class CompletedResponseViewController: BaseViewController,UITableViewDelegate, U
         cell.containResponseView.response = responses[indexPath.row]
         cell.containResponseView.delegate = self
     }
- 
-    
-//    func calculateHeightForConfiguredSizingCell(sizingCell:CompletedTableViewCell) -> CGFloat{
-//    
-//        return size.height + 1.0
-//    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return responses.count
-    }
-    
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        if (isLoading == false && scrollView.isDragging == false && scrollView.isDecelerating == false){
-            if(hasMore){
-                if(scrollView.contentSize.height - scrollView.frame.size.height <= scrollView.contentOffset.y){
-                    self.retrieveData()
-                }
-            }
-        }
-    }
-    //MARK: ResponseViewDelegate
-    func willReloadTableView(){
-        self.tableView.beginUpdates()
-        self.tableView.endUpdates()
-    }
-   
-    func willGoToResponseOriginal(_ challenger:Challenge){
-        let responseDetailVC = storyboard!.instantiateViewController(withIdentifier: "ChallengeDetailViewControllerID") as! ChallengeDetailViewController
-        responseDetailVC.challenge = challenger
-        self.navigationController?.pushViewController(responseDetailVC, animated: true)
-    }
-    func willGotoResponse(_ response: Response) {
-        let responseDetailVC = storyboard!.instantiateViewController(withIdentifier: "ResponseDetailViewControllerID") as! ResponseDetailViewController
-        responseDetailVC.response = response
-        self.navigationController?.pushViewController(responseDetailVC, animated: true)
-    }
-    func willGotoCommentResponse(_ response: Response) {
-        let responseDetailVC = storyboard!.instantiateViewController(withIdentifier: "ResponseDetailViewControllerID") as! ResponseDetailViewController
-        responseDetailVC.response = response
-        responseDetailVC.isNeedShowComment = true
-        self.navigationController?.pushViewController(responseDetailVC, animated: true)
-    }
-    func willGotoListUserLikeResponse(_ response: Response) {
-        //
-    }
-    func willShareResponse(_ response: Response) {
-        //
-    }
-    func willSetPickerDelegate(_ picker:SBPickerSelector){
-        picker.showPickerOver(self)
-    }
+
 }

@@ -8,6 +8,9 @@
 
 import UIKit
 import CoreData
+import FirebaseCrash
+import Firebase
+
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -17,9 +20,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
-    
-        // Override point for customization after application launch.
-        
+        FIRApp.configure()
+//        FIRApp.configure()
+
+        FIRCrashMessage("Cause Crash button clicked")
+//        fatalError()
+//        FIRApp.configure(with: <#T##FIROptions#>)
         return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
 //        return true
     }
@@ -147,9 +153,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     func goToMainViewController(){
         let storyboard = UIStoryboard(name: "Main", bundle: nil);
-        let leftMenuVC = storyboard.instantiateViewController(withIdentifier: "LeftMenuViewControllerID") as! LeftMenuViewController;
+        let leftMenuVC = storyboard.instantiateViewController(withIdentifier: "LeftMenuViewControllerID") as! LeftMenuViewController
+        
         let navLeftVC = UINavigationController(rootViewController: leftMenuVC)
         let newVC = storyboard.instantiateViewController(withIdentifier: "NewsViewControllerID") as! NewsViewController
+        newVC.currentNewFeedType = NewsType.News
         let navNewVC = UINavigationController(rootViewController: newVC)
         
         drawerController = MMDrawerController(center: navNewVC, leftDrawerViewController: navLeftVC)

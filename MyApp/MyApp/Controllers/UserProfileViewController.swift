@@ -59,9 +59,9 @@ class UserProfileViewController: BaseViewController {
                     if(userLoad != nil){
                         self.user = userLoad
                         self.updateUIUser()
-                        self.getResponseImage(0)
+//                        self.getResponseImage(0)
                     }else{
-                        self.showGeneralDialog()
+//                        self.showGeneralDialog()
                     }
                     self.hideHudLoading()
                 })
@@ -73,12 +73,17 @@ class UserProfileViewController: BaseViewController {
         
         
         txtUserName.text = user!.nameUser
-        var userUrl = URL(string: user!.avatar)
-        imgAvatar.sd_setImage(with: userUrl, placeholderImage:  UIImage(named: "img_avatar_holder"))
+        
+        if let userAvatarStr = user!.getAvatarUrl() {
+            imgAvatar.sd_setImage(with: URL(string: userAvatarStr), placeholderImage:  UIImage(named: "img_avatar_holder"))
+
+        }else{
+            imgAvatar.image = UIImage(named: "img_avatar_holder")
+        }
         
         updateTitleFollow()
         
-        if(AuthToken.isCurrentUser(user!.idUser)){
+        if(User.isCurrentUser(user!.idUser)){
             //hidden follow, challenger
             verticalFollowBtnSegment.constant = -50
             imgFollow.isHidden = true
@@ -143,6 +148,7 @@ class UserProfileViewController: BaseViewController {
             btnFollow.setTitle("UnFollow", for: UIControlState())
             imgChallenge.isHidden = false
             btnChallenge.isHidden = false
+//            btnChallenge.backgroundColor = UIColor.yellow
             self.verticalChallengerVsFollow.constant = 10
         }else{
             imgFollow.image = UIImage(named: "ic_not_follow")
@@ -174,6 +180,11 @@ class UserProfileViewController: BaseViewController {
     }
 
     @IBAction func sendChallengeTouched(_ sender: AnyObject) {
+        let storyboard = UIStoryboard(name: "SendMessage", bundle: nil)
+        let newVC = storyboard.instantiateViewController(withIdentifier: "SendMessageViewControllerID") as! SendMessageViewController
+        newVC.userSelected = [self.user!]
+        self.navigationController?.pushViewController(newVC, animated: true)
+        
     }
     @IBAction func listCheckTouched(_ sender: AnyObject) {
 //        var completedVC = storyboard?.instantiateViewControllerWithIdentifier("CompletedResponseViewControllerID") as! CompletedResponseViewController

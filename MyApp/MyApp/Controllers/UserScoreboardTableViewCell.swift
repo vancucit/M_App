@@ -24,7 +24,7 @@ class UserScoreboardTableViewCell: UITableViewCell {
     var user:User!{
         didSet{
             lblRank.text = String(user.currentRank)
-            lblPoints.text = String(user.point)
+//            lblPoints.text = String(user.point)
             lblUserName.text = user.nameUser
             var followingStr = " following, "
             if(user.followingCount > 1){
@@ -35,8 +35,12 @@ class UserScoreboardTableViewCell: UITableViewCell {
                 followerStr = " followers"
             }
             lblFollowNumber.text = String(user.followingCount) + followingStr + String(user.followerCount) + followerStr
-            
-            imgAvatar.sd_setImage(with: URL(string: user.avatar), placeholderImage: UIImage(named: "img_avatar_holder"))
+            if let userStr = user.getThumnailAvatar() {
+                imgAvatar.sd_setImage(with: URL(string: userStr), placeholderImage: UIImage(named: "img_avatar_holder"))
+            }else{
+                imgAvatar.image = UIImage(named: "img_avatar_holder")
+
+            }
         }
     }
     override func awakeFromNib() {

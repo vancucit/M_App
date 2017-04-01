@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import FBSDKLoginKit
+import FBSDKCoreKit
 
 class SettingViewController: BaseViewController, UITableViewDataSource, UITableViewDelegate {
 
@@ -40,7 +42,10 @@ class SettingViewController: BaseViewController, UITableViewDataSource, UITableV
         }
     }
     func logOut(){
-        MyAppService.sharedInstance.client?.logout()
+//        MyAppService.sharedInstance.client?.logout()
+        User.logOut()
+        FBSDKLoginManager().logOut()
+
         AuthToken.sharedInstance.logout()
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         appDelegate.showLoginViewController()

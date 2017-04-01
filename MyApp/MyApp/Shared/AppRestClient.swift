@@ -8,11 +8,12 @@
 
 import UIKit
 import Alamofire
+import SwiftDate
 
 //http://vmobileapi.southeastasia.cloudapp.azure.com/#/docs
 let BaseHost = "vmobileapi.southeastasia.cloudapp.azure.com"
 let BaseUrl = "http://" + BaseHost + "/"
-
+let RelativeBaseUrl = "http://" + BaseHost
 
 enum KeyTypeStr:String{
     case KeyTypeFaceBook = "facebook",KeyTypeTwitter = "twitter",KeyTypeGoogle = "google",KeyTypeMicrosoft = "microsoft"
@@ -38,75 +39,8 @@ class AppRestClient {
     func handleCommonResponseWithDataDetail(_ result:Result<Any>, isNeedShowDialog:Bool, callBack:(Any?,Bool)->())->(){
         switch result {
             case .success(let aData):
-                //            print(aData)
-                if let stringData = aData as? String{
-                    var errorParse:NSError?
-                    
-                    var dataResponse: Data = stringData.data(using: String.Encoding.utf8)!
-                    let json: AnyObject?
-                    do {
-                        json = try JSONSerialization.jsonObject(with: dataResponse, options: JSONSerialization.ReadingOptions.allowFragments) as? AnyObject
-                        
-                    } catch let error as NSError {
-                        errorParse = error
-                        json = nil
-                    }
-                    
-                    if let unwrappedData = json as? NSDictionary {
-                        if let successAuthent = unwrappedData["Success"] as? Bool{
-                            let dataDict = unwrappedData["Data"] as AnyObject
-                            callBack(dataDict, successAuthent)
-                        }else{
-                            callBack(errorParse?.description, false)
-                        }
-                        
-                    }
-                }else if let unwrappedData = aData as? NSDictionary {
-                    if let errorStr = unwrappedData["message"] as? String{
-                        //failure
-                        callBack(errorStr, false)
-                    }else{
-                        callBack(unwrappedData, true)
-                    }
-//                    if let successAuthent = unwrappedData["Success"] as? Bool{
-//                        let dataDict = unwrappedData["Data"] as AnyObject
-//                        callBack(dataDict, successAuthent)
-//                    }else{
-//                        callBack(unwrappedData["Data"] as AnyObject, false, nil)
-//                        print("Failure reason \(unwrappedData)")
-//                    }
-                }else if let dataResponse = aData as? Data{
-                    var errorParse:NSError?
-                    
-                    let json: AnyObject?
-                    do {
-                        json = try JSONSerialization.jsonObject(with: dataResponse, options: JSONSerialization.ReadingOptions.allowFragments) as? AnyObject
-                        
-                    } catch let error as NSError {
-                        errorParse = error
-                        json = nil
-                    }
-                    
-                    if let unwrappedData = json as? NSDictionary {
-                        if let errorStr = unwrappedData["message"] as? String{
-                            //failure
-                            callBack(errorStr, false)
-                        }else{
-                            callBack(unwrappedData, true)
-                        }
-                        
-                    }else{
-                        callBack(nil, false)
-                    }
-                }else if let arrayData = aData as? [Any]{
-                    
-                    callBack(arrayData, true)
-                    
-                }else{
-                    print("Failure reason : nil response")
-                    
-                    callBack(nil, false)
-                }
+                self.handleCommonResponseWithData(aData, isNeedShowDialog:false, callBack: callBack)
+
                 break
             case .failure(let error):
                 if(isNeedShowDialog == true){
@@ -116,6 +50,78 @@ class AppRestClient {
             break
         }
         
+    }
+    func handleCommonResponseWithData(_ aData:Any, isNeedShowDialog:Bool, callBack:(Any?,Bool)->())->(){
+        //            print(aData)
+        if let stringData = aData as? String{
+            var errorParse:NSError?
+            
+            let dataResponse: Data = stringData.data(using: String.Encoding.utf8)!
+            let json: AnyObject?
+            do {
+                json = try JSONSerialization.jsonObject(with: dataResponse, options: JSONSerialization.ReadingOptions.allowFragments) as? AnyObject
+                
+            } catch let error as NSError {
+                errorParse = error
+                json = nil
+            }
+            
+            if let unwrappedData = json as? NSDictionary {
+                if let successAuthent = unwrappedData["Success"] as? Bool{
+                    let dataDict = unwrappedData["Data"] as AnyObject
+                    callBack(dataDict, successAuthent)
+                }else{
+                    callBack(errorParse?.description, false)
+                }
+                
+            }
+        }else if let unwrappedData = aData as? NSDictionary {
+            if let errorStr = unwrappedData["message"] as? String{
+                //failure
+                callBack(errorStr, false)
+            }else{
+                callBack(unwrappedData, true)
+            }
+            //                    if let successAuthent = unwrappedData["Success"] as? Bool{
+            //                        let dataDict = unwrappedData["Data"] as AnyObject
+            //                        callBack(dataDict, successAuthent)
+            //                    }else{
+            //                        callBack(unwrappedData["Data"] as AnyObject, false, nil)
+            //                        print("Failure reason \(unwrappedData)")
+            //                    }
+        }else if let dataResponse = aData as? Data{
+            var errorParse:NSError?
+            
+            let json: AnyObject?
+            do {
+                json = try JSONSerialization.jsonObject(with: dataResponse, options: JSONSerialization.ReadingOptions.allowFragments) as? AnyObject
+                
+            } catch let error as NSError {
+                errorParse = error
+                json = nil
+            }
+            
+            if let unwrappedData = json as? NSDictionary {
+                if let errorStr = unwrappedData["message"] as? String{
+                    //failure
+                    callBack(errorStr, false)
+                }else{
+                    callBack(unwrappedData, true)
+                }
+                
+            }else{
+                callBack(nil, false)
+            }
+        }else if let arrayData = aData as? [Any]{
+            
+            callBack(arrayData, true)
+            
+        }else{
+            print("Failure reason : nil response")
+            
+            callBack(nil, false)
+        }
+
     }
     func  showGeneralDialog(_ isNeedShowDialog:Bool)  {
         if isNeedShowDialog {
@@ -170,11 +176,13 @@ class AppRestClient {
 
     }
     func getFollows(_ userID:String, page:Int, keyword:String,getFollowing:Bool, callback:@escaping ([User]?,String?)->()){
-        var urlRequest = getFollowing ? getAbsoluteUrl("user/followings"):getAbsoluteUrl("user/followers")
-        self.addAuthToken(AuthToken.sharedInstance.authenticationToken!)
-        let params = ["pageIndex": page as AnyObject,"limit":Page_Count as AnyObject,"userId":userID as AnyObject, "keyword":keyword as AnyObject] as [String:AnyObject]
+        var urlRequest = getFollowing ? getAbsoluteUrl("/api/mobile/followings/" + userID):getAbsoluteUrl("api/mobile/followings/followers/"  + userID)
+//        self.addAuthToken(AuthToken.sharedInstance.authenticationToken!)
 
-        request(urlRequest, method:.post, parameters: params).responseJSON(){ result in
+//        let params = ["pageIndex": page as AnyObject,"limit":Page_Count as AnyObject,"userId":userID as AnyObject, "keyword":keyword as AnyObject] as [String:AnyObject]
+        let params = ["userId":userID as AnyObject] as [String:AnyObject]
+
+        request(urlRequest, method:.get, parameters: nil, headers: AppRestClient.headerRequestBear()).responseJSON(){ result in
             self.handleCommonResponseWithData(result, callBack: { (objectResopnse, isSuccess) -> () in
                 if(isSuccess == true){
                     var arrUser = objectResopnse as! [NSDictionary]
@@ -195,8 +203,8 @@ class AppRestClient {
         let urlRequest = getAbsoluteUrl("user/followers/pending")
         self.addAuthToken(AuthToken.sharedInstance.authenticationToken!)
         let params = ["pageIndex": pageIndex as AnyObject,"limit":Page_Count as AnyObject, "keyword":keyword as AnyObject] as [String:AnyObject]
-        
-        request(urlRequest, method:.post, parameters: params).responseJSON(){ result in
+
+        request(urlRequest, method:.post, parameters: params, headers:AppRestClient.headerRequestBear()).responseJSON(){ result in
             self.handleCommonResponseWithData(result, callBack: { (objectResopnse, isSuccess) -> () in
                 if(isSuccess == true){
                     let arrUser = objectResopnse as! [NSDictionary]
@@ -214,52 +222,164 @@ class AppRestClient {
     }
     
     func follow(_ userID:String, isFollow:Bool, callback:@escaping (Bool, String?)->()){
-        var urlRequest = isFollow ? getAbsoluteUrl("user/follow/request/") + userID :getAbsoluteUrl("user/unfollow/") + userID
-        request(urlRequest, method:.get, parameters: nil).responseJSON(){ result in
+        var urlRequest = isFollow ? getAbsoluteUrl("api/mobile/followings/follow") :getAbsoluteUrl("api/mobile/followings/unfollow")
+        let params = ["userId": userID]  as [String:String]
+
+
+        request(urlRequest, method:.post, parameters: params, headers:AppRestClient.headerRequestBear()).responseJSON(){ result in
             self.handleCommonResponseWithData(result, callBack: { (objectResopnse, isSuccess) -> () in
                 callback(isSuccess,objectResopnse as? String)
             })
         }
     }
-   
-    
+    func sendChallenge(_ attacmentUrl:String,descriptionStr:String,endDate:Int,participants:[User], isPublic:Bool, callback:@escaping (Bool,String?)->()){
+        
+        let currentDate = Date()
+//        stringFromUTCTime
+//        let currentDateStr = shortStringFromDate(currentDate)
+//        let endDateStr = shortStringFromDate(currentDate + 1.weeks)
+        let currentDateStr = stringFromUTCTime(currentDate)
+        let endDateStr = stringFromUTCTime(currentDate + endDate.hours )
+        
+        var url = getAbsoluteUrl("api/mobile/challenges?") + String(format:"startDate=%@&endDate=%@&description=%@&publish=%@",currentDateStr!, endDateStr!,descriptionStr,String(isPublic)).addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+        
+        for user in participants {
+            url = url + String(format: "&userIds=%@", user.idUser)
+        }
+        
+        
+        Alamofire.request(url,method:.post,  parameters: nil, headers:AppRestClient.headerRequestBear()).responseJSON(){
+            result in
+            
+            self.handleCommonResponseWithData(result, callBack: { (objectResopnse, isSuccess) -> () in
+                
+                callback(isSuccess,objectResopnse as? String)
+                
+                
+            })
+        }
+        
+    }
+//    func sendChallenge(_ attacmentUrl:String,description:String,endDate:String,participants:[User], isPublic:Bool, callback:@escaping (Bool,String?)->()){
+////        api/mobile/challenges
+//        http://vmobileapi.southeastasia.cloudapp.azure.com/api/mobile/challenges?createDate=2017-02-22&endDate=2017-03-01&attachment=http%3A%2F%2Fgoogle.com&description=hello3&isPublish=true&userIds=1&userIds=2&userIds=3
+//
+//        
+//    }
     //MARK: Challenger
-    func sendChallenge(_ attacmentUrl:String,description:String,endDate:String,participants:[User], isPublic:Bool, callback:@escaping (Bool,String?)->()){
+    func sendChallenge11(_ attacmentUrl:String,description:String,endDate:Int,participants:[User], isPublic:Bool, callback:@escaping (Bool,String?)->()){
         var isPublicStr = "false"
         if(isPublic){
             isPublicStr = "true"
         }
-        var arrayIDUser = [Dictionary<String,String>]()
+        var arrayIDUser = [String]()
         for user in participants {
-            arrayIDUser.append(["ID":user.idUser])
+            arrayIDUser.append(user.idUser)
         }
-
-        let params = ["Description": description as AnyObject,"ExpirationType":endDate as AnyObject,"IsPublic": isPublic as AnyObject, "Participants":arrayIDUser as AnyObject]  as [String:AnyObject]
+        let token_user = "Bearer " + User.getToken()!
         
-        self.addAuthToken(AuthToken.sharedInstance.authenticationToken!)
+        let currentDate = Date()
+        let currentDateStr = shortStringFromDate(currentDate)
+        
+        let endDateStr = shortStringFromDate(currentDate + endDate.hours)
+        
+        let params = ["attachment":"http:test.com","createDate": currentDateStr!,"description":description ,"endDate":endDateStr! ,"isPublish": isPublic , "userIds":arrayIDUser ]  as [String: Any]
+        
+        let jsonData = try? JSONSerialization.data(withJSONObject: params)
+        
+        // create post request
+        let url = URL(string: getAbsoluteUrl("api/mobile/challenges"))!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("application/json",forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json",forHTTPHeaderField: "Accept")
+        request.addValue(token_user,forHTTPHeaderField: "Authorization")
+        // insert json data to the request
+        request.httpBody = jsonData
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {
+                print(error?.localizedDescription ?? "No data")
+                callback(false,error!.localizedDescription as? String)
+                return
+            }
+            let responseJSON = try? JSONSerialization.jsonObject(with: data, options: [])
+            if let responseJSON = responseJSON as? [String: Any] {
+                callback(true, nil)
 
-        Alamofire.request(getAbsoluteUrl("challenge/send"),method:.post, parameters: params).responseJSON(){ result in
+                print(responseJSON)
+            }
+        }
+        
+        task.resume()
+
+
+    }
+    func getNewFeedTest(_ pageIndex:Int, newFeedType:NewsType, keyword:String, callback:@escaping ([NewFeed]?,String?) -> ()){
+        var urlCall:String!
+        switch newFeedType {
+        case .NewChallenger:
+//            urlCall = "api/mobile/user/challenges"
+            urlCall = "api/mobile/user/challenges/" + User.shareInstance.idUser
+            break
+            
+        case .Following:
+//            urlCall = "api/mobile/user/challenges/" + User.shareInstance.idUser
+//            urlCall = "news/following"
+             urlCall = "api/mobile/user/" + "newsfeed".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+            break
+        case .News:
+//            urlCall = "/api/challenges"
+             urlCall = "api/mobile/user/" + "newsfeed".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+//            urlCall = "api/mobile/user/challenges/" + User.shareInstance.idUser
+            break
+        default:
+            callback(nil,nil)
+            return
+        }
+        
+//
+
+//        self.addAuthToken(AuthToken.sharedInstance.authenticationToken!)
+        let params = ["pageIndex": pageIndex as AnyObject,"limit":Page_Count as AnyObject, "keyword":keyword as AnyObject] as [String:AnyObject]
+        
+        request(getAbsoluteUrl(urlCall), method:.get, parameters: nil, headers:AppRestClient.headerRequestBear()).responseJSON(){
+            result in
             self.handleCommonResponseWithData(result, callBack: { (objectResopnse, isSuccess) -> () in
                 if(isSuccess == true){
-                    callback(true, nil)
+                    var arrUser = objectResopnse as! [NSDictionary]
+                    var challengers = [NewFeed]()
+                    for dictUser  in arrUser{
+                        
+                        if(newFeedType == NewsType.NewChallenger){
+                            //TODO: test
+                            var challenge = NewFeed(challenge: Challenge(jsonDict: dictUser))
+                            challengers.append(challenge)
+                            
+                        }else{
+                            var newFeed = NewFeed(response: Response(jsonDict: dictUser))
+                            challengers.append(newFeed)
+                        }
+                    }
+                    callback(challengers, nil)
                 }else{
-                    callback(false,objectResopnse as? String)
+                    callback(nil,objectResopnse as? String)
                 }
             })
         }
+        
     }
-   
+    
     func getNewFeed(_ pageIndex:Int, newFeedType:NewsType, keyword:String, callback:@escaping ([NewFeed]?,String?) -> ()){
         var urlCall:String!
         switch newFeedType {
         case .NewChallenger:
             urlCall = "challenges/to-me"
             break
-            
         case .Following:
             urlCall = "news/following"
             break
-        case .Public:
+        case .News:
             urlCall = "news/public"
             break
         default:
@@ -273,14 +393,14 @@ class AppRestClient {
             result in
             self.handleCommonResponseWithData(result, callBack: { (objectResopnse, isSuccess) -> () in
                 if(isSuccess == true){
-                    var arrUser = objectResopnse as! [NSDictionary]
+                    let arrUser = objectResopnse as! [NSDictionary]
                     var challengers = [NewFeed]()
                     for dictUser  in arrUser{
                         if(newFeedType == NewsType.NewChallenger){
-                            var challenge = NewFeed(challenge: Challenge(jsonDict: dictUser))
+                            let challenge = NewFeed(challenge: Challenge(jsonDict: dictUser))
                             challengers.append(challenge)
                         }else{
-                            var newFeed = NewFeed(response: Response(jsonDict: dictUser))
+                            let newFeed = NewFeed(response: Response(jsonDict: dictUser))
                             challengers.append(newFeed)
                         }
                     }
@@ -293,6 +413,24 @@ class AppRestClient {
 
     }
   
+    func getChallengerDetail(_ challengerID:String, callback:@escaping (Challenge?,String?) -> ()){
+       
+        let urlCall = "api/mobile/challenges/" + String(challengerID)
+        request(getAbsoluteUrl(urlCall), method:.get, parameters: nil, headers:AppRestClient.headerRequestBear()).responseJSON(){
+            result in
+            self.handleCommonResponseWithData(result, callBack: { (objectResopnse, isSuccess) -> () in
+                if(isSuccess == true){
+                    let dictUser = objectResopnse as! NSDictionary
+                    let challenger = Challenge(jsonDict: dictUser)
+                    callback(challenger, nil)
+                }else{
+                    callback(nil,objectResopnse as? String)
+                }
+            })
+        }
+        
+    }
+
     
     func getResponse(_ pageIndex:Int, userId:String, callback:@escaping ([Response]?,String?) -> ()){
         self.addAuthToken(AuthToken.sharedInstance.authenticationToken!)
@@ -305,7 +443,7 @@ class AppRestClient {
                     var arrUser = objectResopnse as! [NSDictionary]
                     var responses = [Response]()
                     for dictUser  in arrUser{
-                        var response = Response(jsonDict: dictUser)
+                        let response = Response(jsonDict: dictUser)
                         responses.append(response)
                     }
                     callback(responses, nil)
@@ -318,9 +456,9 @@ class AppRestClient {
     
     
     func rejectChallenger(_ idChallenge:String, callback:@escaping (Bool,String?) -> ()){
-        self.addAuthToken(AuthToken.sharedInstance.authenticationToken!)
-        var urlRequest = getAbsoluteUrl("challenge/reject/") + idChallenge
-        request(urlRequest, method:.get, parameters: nil).responseJSON(){
+//        self.addAuthToken(AuthToken.sharedInstance.authenticationToken!)
+        var urlRequest = getAbsoluteUrl("api/mobile/challenge-responses/deny?challengeId=") + idChallenge
+        request(urlRequest, method:.post, parameters: nil, headers:AppRestClient.headerRequestBear()).responseJSON(){
             result in
             self.handleCommonResponseWithData(result, callBack: { (objectResopnse, isSuccess) -> () in
                 if(isSuccess == true){
@@ -331,10 +469,10 @@ class AppRestClient {
             })
         }
     }
-    func likeChallenger(_ itemID:String, challengerID:String, callback:@escaping (Bool,String?) -> ()){
-        self.addAuthToken(AuthToken.sharedInstance.authenticationToken!)
-        let urlRequest = getAbsoluteUrl("challenge/like/") + itemID + "/" + challengerID
-        request( urlRequest + challengerID, method:.get, parameters: nil).responseJSON(){
+    func likeChallenger(_ challengerID:String, callback:@escaping (Bool,String?) -> ()){
+//        self.addAuthToken(AuthToken.sharedInstance.authenticationToken!)
+        let urlRequest = getAbsoluteUrl("api/mobile/user/challenges/like/") + challengerID
+        request( urlRequest , method:.post, parameters: nil, headers:AppRestClient.headerRequestBear()).responseJSON(){
             result in
             self.handleCommonResponseWithData(result, callBack: { (objectResopnse, isSuccess) -> () in
                 if(isSuccess == true){
@@ -375,9 +513,9 @@ class AppRestClient {
     }
     //MARK: Response
     func likeResponse(_ isLike:Bool, responseID:String, callback:@escaping (Bool,String?) -> ()){
-        self.addAuthToken(AuthToken.sharedInstance.authenticationToken!)
-        let urlRequest = (isLike) ? getAbsoluteUrl("response/like/") : getAbsoluteUrl("response/dislike/")
-        request(urlRequest + responseID,method:.get, parameters: nil).responseJSON(){
+//        self.addAuthToken(AuthToken.sharedInstance.authenticationToken!)
+        let urlRequest = (isLike) ? getAbsoluteUrl("api/mobile/user/challenges-responses/like/" + responseID) : getAbsoluteUrl("api/mobile/user/challenges-responses/unike/" + responseID)
+        request(urlRequest ,method:.post, parameters: nil, headers:AppRestClient.headerRequestBear()).responseJSON(){
             result in
             self.handleCommonResponseWithData(result, callBack: { (objectResopnse, isSuccess) -> () in
                 if(isSuccess == true){
@@ -387,6 +525,23 @@ class AppRestClient {
                 }
             })
         }
+    }
+    func sendReplyRepsone(_ challengeID:String, comment:String, photoUrl:String, isResonse:Bool, callback:@escaping (Bool, String?) -> ()){
+//        let params = ["challengeId": challengeID as AnyObject,"photoUrl":photoUrl as AnyObject,"comment": comment as AnyObject, "IsResponse":isResonse as AnyObject]  as [String:AnyObject]
+        let url = getAbsoluteUrl("api/mobile/challenge-responses/reply?") + String(format:"challengeId=%@&comment=%@&photoUrl=%@",challengeID,comment,photoUrl).addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+
+        
+        Alamofire.request(url,method:.post,  parameters: nil, headers:AppRestClient.headerRequestBear()).responseJSON(){
+            result in
+            
+            self.handleCommonResponseWithData(result, callBack: { (objectResopnse, isSuccess) -> () in
+            
+                    callback(isSuccess,objectResopnse as? String)
+                
+                
+            })
+        }
+        
     }
     func sendResponse(_ challengeID:String, comment:String, photoUrl:String, isResonse:Bool, callback:@escaping (String?, String?) -> ()){
         
@@ -406,34 +561,30 @@ class AppRestClient {
             })
         }
     }
-    func commentResponse(_ responseID:String, comment:String, callback:@escaping (String?, String?) -> ()){
+    func commentResponse(_ responseID:String, comment:String, callback:@escaping (Bool, String?) -> ()){
         
-        let params = ["ResponseID": responseID as AnyObject,"Comment": comment as AnyObject]  as [String:AnyObject]
+        let params = ["comment": comment as Any]  as [String:Any]
         
-        self.addAuthToken(AuthToken.sharedInstance.authenticationToken!)
-        
-        Alamofire.request(getAbsoluteUrl("response/comment"), method:.post, parameters: params).responseJSON(){
+        let url = getAbsoluteUrl("api/mobile/response-comments/" + responseID)
+        Alamofire.request(url, method:.post, parameters: params, headers:AppRestClient.headerRequestBear()).responseJSON(){
             result in
             
             self.handleCommonResponseWithData(result, callBack: { (objectResopnse, isSuccess) -> () in
-                if(isSuccess == true){
-                    callback(objectResopnse as? String, nil)
-                }else{
-                    callback(nil,objectResopnse as? String)
-                }
+                callback(isSuccess,objectResopnse as? String)
             })
         }
     }
     func getCommentsForResponse(_ responseID:String, pageIndex:Int, callback:@escaping ([ResponseComment]?,String?) ->()){
         
-        self.addAuthToken(AuthToken.sharedInstance.authenticationToken!)
-        let params = ["pageIndex": pageIndex as AnyObject,"limit":Page_Count as AnyObject, "responseId":responseID as AnyObject] as [String:AnyObject]
-
-        request(getAbsoluteUrl("response/comments"),method:.post,  parameters: params).responseJSON(){
+//        self.addAuthToken(AuthToken.sharedInstance.authenticationToken!)
+//        let params = ["pageIndex": pageIndex as AnyObject,"limit":Page_Count as AnyObject, "responseId":responseID as AnyObject] as [String:AnyObject]
+        
+        let url = getAbsoluteUrl("api/mobile/response-comments/" + responseID)
+        request(url,method:.get,  parameters: nil, headers:AppRestClient.headerRequestBear()).responseJSON(){
             result in
             self.handleCommonResponseWithData(result, callBack: { (objectResopnse, isSuccess) -> () in
                 if(isSuccess == true){
-                    var arrDict = objectResopnse as! [NSDictionary]
+                    let arrDict = objectResopnse as! [NSDictionary]
                     var responses = [ResponseComment]()
                     for dicComment  in arrDict{
                         var newComment = ResponseComment(objDic: dicComment)
@@ -448,10 +599,10 @@ class AppRestClient {
     }
     
     func getResponsesForChallenge(_ challengeID:String, pageIndex:Int, callback: @escaping ([Response]?,String?) -> () ){
-        self.addAuthToken(AuthToken.sharedInstance.authenticationToken!)
-        let params = ["pageIndex": pageIndex as AnyObject,"limit":Page_Count as AnyObject, "challengeId":challengeID as AnyObject] as [String:AnyObject]
+        _ = ["pageIndex": pageIndex as AnyObject,"limit":Page_Count as AnyObject, "challengeId":challengeID as AnyObject] as [String:AnyObject]
+        let url = getAbsoluteUrl("api/mobile/challenge-responses/") + challengeID
         
-        request(getAbsoluteUrl("responses/challenge"), method:.post, parameters: params).responseJSON(){
+        request(url, method:.get, parameters: nil, headers:AppRestClient.headerRequestBear()).responseJSON(){
             result in
             self.handleCommonResponseWithData(result, callBack: { (objectResopnse, isSuccess) -> () in
                 if(isSuccess == true){
@@ -514,7 +665,7 @@ class AppRestClient {
     func rateChallenge(_ challengeAuthorID:String, challengeID:String, rate:Int, callback:@escaping (Bool, String?) -> ()){
         self.addAuthToken(AuthToken.sharedInstance.authenticationToken!)
         let params = ["challengeAuthorID": challengeAuthorID as AnyObject,"challengeID":challengeID as AnyObject,"rate":rate as AnyObject] as [String:AnyObject]
-        var urlRequest = getAbsoluteUrl("challenge/rate")
+        let urlRequest = getAbsoluteUrl("challenge/rate")
         request(urlRequest ,method:.post, parameters: params).responseJSON(){
             result in
             self.handleCommonResponseWithData(result, callBack: { (objectResopnse, isSuccess) -> () in
@@ -535,7 +686,7 @@ class AppRestClient {
             result in
             self.handleCommonResponseWithData(result, callBack: { (objectResopnse, isSuccess) -> () in
                 if(isSuccess == true){
-                    var arrDict = objectResopnse as! [NSDictionary]
+                    let arrDict = objectResopnse as! [NSDictionary]
                     var notifications = [Notification]()
                     for aDict  in arrDict{
                         var notification = Notification(aDictMessage: aDict)
@@ -566,19 +717,123 @@ class AppRestClient {
             })
         }
     }
+    
     //MARK:  Upload file
+    func uploadFileNew(_ dataImage:UIImage, progress:(CGFloat?) ->(), callback:@escaping (String?,String?) -> () ){
+        // create post request
+        let url = URL(string: getAbsoluteUrl("api/mobile/file-stores"))!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("Bearer " + User.getToken()!,forHTTPHeaderField: "Authorization")
+        let boundary = generateBoundaryString()
+        
+        request.addValue("multipart/form-data; boundary=" + boundary,forHTTPHeaderField: "Content-Type")
+        
+        request.addValue("*/*",forHTTPHeaderField: "Accept")
+        //let imageUrl = Bundle.main.path(forResource: "test_upload", ofType: "jpg")!
+        
+        do {
+            request.httpBody = try createBody(with: nil, filePathKey: "content", paths: [UIImageJPEGRepresentation(dataImage, 0.9)!], boundary: boundary)
+        }catch {
+            callback(nil, nil)
+        }
+        
+        
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {
+                print(error?.localizedDescription ?? "No data")
+                callback(nil, nil)
+                return
+            }
+            let responseJSON = try? JSONSerialization.jsonObject(with: data, options: [])
+            if let responseJSON = responseJSON as? [String: Any] {
+                if let urlString = responseJSON["downloadUrl"] as? String{
+                    callback(RelativeBaseUrl + urlString, nil)
+                }else{
+                  callback(nil , nil)
+                }
+                
+                print(responseJSON)
+            }
+        }
+        
+        task.resume()
+    }
+    
+    func generateBoundaryString() -> String {
+        return "Boundary-\(NSUUID().uuidString)"
+    }
+    func createBody(with parameters: [String: String]?, filePathKey: String, paths: [Data], boundary: String) throws -> Data {
+        var body = Data()
+        
+        if parameters != nil {
+            for (key, value) in parameters! {
+                body.append("--\(boundary)\r\n")
+                body.append("Content-Disposition: form-data; name=\"\(key)\"\r\n\r\n")
+                body.append("\(value)\r\n")
+            }
+        }
+        
+        for path in paths {
+            //let url = URL(fileURLWithPath: path)
+            let filename = "image.jpg"
+            //let data = try Data(contentsOf: url)
+            //let mimetype = path.mimeType()
+            let mimetype = "image/jpeg"
+            body.append("--\(boundary)\r\n")
+            body.append("Content-Disposition: form-data; name=\"\(filePathKey)\"; filename=\"\(filename)\"\r\n")
+            body.append("Content-Type: \(mimetype)\r\n\r\n")
+            body.append(path)
+            body.append("\r\n")
+        }
+        
+        body.append("--\(boundary)--\r\n")
+        return body
+    }
+    
     func uploadFile(_ dataImage:UIImage, progress:(CGFloat?) ->(), callback:(String?,String?) -> () ){
         // CREATE AND SEND REQUEST ----------
         
 
-        self.addAuthToken(AuthToken.sharedInstance.authenticationToken!)
 
-        let parameters = ["file":NetData(jpegImage: dataImage, compressionQuanlity: 0.7, filename: "avatar1.jpg")]
+
+
         
+
         
-        let urlRequest = self.urlRequestWithComponents(getAbsoluteUrl("upload"), parameters: parameters as NSDictionary)
+        do {
+            let urlRequest = try URLRequest(url: URL(string:getAbsoluteUrl("api/mobile/file-stores"))!, method: .post, headers:AppRestClient.headerRequestBear())
+            
+            let fileURL = URL(fileURLWithPath: "")
+            //        Alamofire.uploa
+            Alamofire.upload(fileURL, with: urlRequest).validate().responseData { response in
+                debugPrint(response)
+            }
+        } catch  {
+            print("Not valid")
+        }
         
+//        let headers: HTTPHeaders = [ "auth-token": "(your auth token)" ]
+        let aURL = try! URLRequest(url: getAbsoluteUrl("api/mobile/file-stores"), method: .post, headers: AppRestClient.headerRequestBear())
         
+        let dataUpload = UIImageJPEGRepresentation(dataImage, 0.9)! as Data
+        Alamofire.upload(multipartFormData: { multipartFormData in
+            multipartFormData.append(dataUpload, withName: "test", fileName: "picture.jpg", mimeType: "image/jpeg")
+        }, with: aURL, encodingCompletion: {
+            encodingResult in
+            switch encodingResult {
+            case .success(let upload, _, _):
+                upload.responseJSON { response in
+                    debugPrint("SUCCESS RESPONSE: \(response)")
+                }
+            case .failure(let encodingError):
+                // hide progressbas here
+                print("ERROR RESPONSE: \(encodingError)")
+            }
+        })
+        
+//        Alamofire.up
 //        Alamofire.upload(urlRequest)
 //            .progress { (bytesWritten, totalBytesWritten, totalBytesExpectedToWrite) in
 //                print("\(totalBytesWritten) / \(totalBytesExpectedToWrite)")
@@ -623,7 +878,7 @@ class AppRestClient {
                 //uploadData.appendData("Content-Disposition: form-data; name=\"\(key)\"; filename=\"\(postData.filename)\"\r\n".dataUsingEncoding(NSUTF8StringEncoding)!)
                 
                 // append content disposition
-                var filenameClause = " filename=\"\(postData.filename)\""
+                let filenameClause = " filename=\"\(postData.filename)\""
                 let contentDispositionString = "Content-Disposition: form-data; name=\"\(key)\";\(filenameClause)\r\n"
                 let contentDispositionData = contentDispositionString.data(using: String.Encoding.utf8)
                 uploadData.append(contentDispositionData!)

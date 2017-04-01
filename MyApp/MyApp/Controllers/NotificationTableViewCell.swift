@@ -20,8 +20,11 @@ class NotificationTableViewCell: UITableViewCell {
         didSet{
             lblUserName.text = notification.createdBy.nameUser
             lblContent.text = notification.getMessage()
-            var userUrl = URL(string: notification.createdBy!.avatar)
-            imgViewAvatr.sd_setImage(with: userUrl, placeholderImage: UIImage(named: "img_avatar_holder"))
+            if let userUrlStr = notification.createdBy.getThumnailAvatar(){
+                let userUrl = URL(string: userUrlStr)
+                imgViewAvatr.sd_setImage(with: userUrl, placeholderImage: UIImage(named: "img_avatar_holder"))
+                
+            }
             if(notification.typeNoti == notification.TYPE_REQUEST){
                 var challenge = notification.objectNoti as! Challenge
                 if challenge.endDate != nil {

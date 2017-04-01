@@ -30,7 +30,16 @@ pod "FBSDKShareKit"
 
 pod "FBSDKLoginKit"
 
+
 pod 'SBPickerSelector'
+
+pod 'Firebase/Core'
+pod 'Firebase/Crash'
+
+
+pod 'SwiftDate', '~> 4.0'
+pod 'BTNavigationDropdownMenu', :git => 'https://github.com/PhamBaTho/BTNavigationDropdownMenu.git', :branch => 'swift-3.0'
+
 
 post_install do |installer|
     installer.pods_project.targets.each do |target|
@@ -42,7 +51,4 @@ end
 
 end
 
-target 'MyAppTests' do
-
-end
 

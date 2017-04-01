@@ -51,7 +51,8 @@ class NotificationViewController: BaseViewController, UITableViewDelegate, UITab
                     self.hasMoreNotification = false
                 }
             }else{
-                self.showGeneralDialog()
+//                self.showGeneralDialog()
+                self.showDialogOnConstruction()
             }
             self.hideHudLoading()
         })

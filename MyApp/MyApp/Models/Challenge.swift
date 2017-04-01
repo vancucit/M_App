@@ -8,6 +8,19 @@
 
 import UIKit
 
+struct ChallengerParticipant {
+    var idChaPart:String
+    var isAccepted:Bool = false
+    var isCreator: Bool = false
+    var challengerID:String
+    init(jsonDict:NSDictionary) {
+        idChaPart = String(jsonDict["id"] as! Int)
+        isAccepted = (jsonDict["accept"] as? Bool)!
+        isCreator = (jsonDict["creator"] as? Bool)!
+        challengerID = String(jsonDict["challengeId"] as! Int)
+    }
+}
+
 class Challenge: NSObject {
     var idChallenge: String!
     var attachment:String?
@@ -17,6 +30,7 @@ class Challenge: NSObject {
     var dateCreate:Date?
     var endDate:Date?
     var commentCount = 0
+    var numberResponse:Int = 0
     var user:User?
     var participants = [User]()
     var isLikeByCurrentUser = false
@@ -30,10 +44,34 @@ class Challenge: NSObject {
 
     convenience init(jsonDict:NSDictionary) {
         self.init()
-        
-        idChallenge = jsonDict["id"] as! String
-        attachment = jsonDict["Attachment"] as? String
-        descriptionChallenge = jsonDict["Description"] as? String
+        idChallenge = String(jsonDict["id"] as! Int)
+        descriptionChallenge = jsonDict["description"] as? String
+        attachment = jsonDict["attachment"] as? String
+        commentCount = jsonDict["commentCount"] as! Int
+        numberResponse = jsonDict["responseCount"] as! Int
+
+        if let participiantUser = jsonDict["challengeParticipants"] as? [NSDictionary]{
+            for dicAUser in participiantUser {
+                let challengerPartic = ChallengerParticipant(jsonDict: dicAUser)
+                if challengerPartic.isCreator {
+                    self.user = User(jsonDict: (dicAUser["user"] as! NSDictionary))
+                }else{
+                    let aUser  = User(jsonDict: (dicAUser["user"] as! NSDictionary))
+                    participants.append(aUser)
+                }
+            }
+        }
+        if let dateCreateStr = jsonDict["createDate"] as? String{
+            dateCreate = dateWithISO8601String(dateCreateStr)
+        }
+        if let dateEndStr = jsonDict["endDate"] as? String{
+            endDate = dateWithISO8601String(dateEndStr)
+        }
+        isLikeByCurrentUser = jsonDict["like"] as! Bool
+
+        /*
+
+
         likeCount = jsonDict["LikeCount"] as! Int
         dislikeCount = jsonDict["DislikeCount"] as! Int
         commentCount = jsonDict["CommentCount"] as! Int
@@ -46,8 +84,6 @@ class Challenge: NSObject {
             }
         }
 
-        let dateCreateStr = jsonDict["DateCreated"] as! String
-        dateCreate = dateWithISO8601String(dateCreateStr)
         if let dateEndStr = jsonDict["EndDate"] as? String{
             endDate = dateWithISO8601String(dateEndStr)
         }
@@ -59,18 +95,19 @@ class Challenge: NSObject {
         if let aBoolValue = jsonDict["IsSentToCurrentUser"] as? Bool {
             isSentToCurrentUser = aBoolValue
         }
-//        isSentToCurrentUser = jsonDict["IsSentToCurrentUser"] as! Bool
+
         if let aBoolValue = jsonDict["HasResponseByCurrentUser"] as? Bool {
             hasResponseByCurrentUser = aBoolValue
         }
-//        hasResponseByCurrentUser = jsonDict["HasResponseByCurrentUser"] as! Bool
         if let aBoolValue = jsonDict["IsRatedByCurrentUser"] as? Bool {
             isRateByCurrentUser = aBoolValue
         }
-//        isRateByCurrentUser = jsonDict["IsRatedByCurrentUser"] as! Bool
+
         
         totalRatedPoint = jsonDict["TotalRatedPoint"] as! Int
         ratedByCurrentUser = jsonDict["RatedByCurrentUser"] as! Int
         challengeReceivedID = jsonDict["ChallengeReceiverId"] as? String
+ */
+        
     }
 }

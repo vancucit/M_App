@@ -71,7 +71,7 @@ class ScoreboardViewController: BaseViewController, UITableViewDelegate, UITable
         isFollowingLoading = true
 
         self.showHudWithString("")
-        AppRestClient.sharedInstance.getFollows(AuthToken.sharedInstance.currentUser!.idUser, page: currentFollowingPageIndex, keyword: "", getFollowing: true) { (usersLoad, error) -> () in
+        AppRestClient.sharedInstance.getFollows(User.shareInstance.idUser, page: currentFollowingPageIndex, keyword: "", getFollowing: true) { (usersLoad, error) -> () in
             if((usersLoad) != nil){
                 self.currentFollowingPageIndex += 1
                 self.userFollowings += usersLoad!
@@ -112,9 +112,16 @@ class ScoreboardViewController: BaseViewController, UITableViewDelegate, UITable
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "UserScoreboardTableViewCellID", for: indexPath) as! UserScoreboardTableViewCell
         if(self.segmentScoreBoard.selectedSegmentIndex == 0){
+            let user = userTop50s[indexPath.row]
+            user.currentRank = indexPath.row + 1
             cell.user = userTop50s[indexPath.row]
+            
         }else{
-            cell.user =  userFollowings[indexPath.row]
+            let user = userFollowings[indexPath.row]
+            user.currentRank = indexPath.row + 1
+            cell.user =  user
+        
+
         }
 
         return cell

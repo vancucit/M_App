@@ -7,11 +7,16 @@
 //
 
 import Foundation
+import QuartzCore
 extension UIView {
     class func loadFromNibNamed(_ nibNamed: String, bundle : Bundle? = nil) -> UIView? {
         return UINib(
             nibName: nibNamed,
             bundle: bundle
             ).instantiate(withOwner: self, options: nil)[0] as? UIView
+    }
+    func cornerButton(){
+        self.layer.cornerRadius = 4.0
+        self.layer.masksToBounds = true
     }
 }

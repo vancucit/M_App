@@ -77,7 +77,9 @@ class SendReplyMessageViewController: BaseKeyboardViewController , UIScrollViewD
         }
         self.view.endEditing(true)
         self.showHudWithString("")
-        AppRestClient.sharedInstance.uploadFile(imagUpload!, progress: { (percentage) -> () in
+//        self.sendResponseWithUrl("http://url.com")
+        
+        AppRestClient.sharedInstance.uploadFileNew(imagUpload!, progress: { (percentage) -> () in
             print("------ \(percentage)")
             }, callback: { (urlImage, error) -> () in
                 if(urlImage != nil){
@@ -87,17 +89,16 @@ class SendReplyMessageViewController: BaseKeyboardViewController , UIScrollViewD
                     self.hideHudLoading()
                 }
         })
-        
-
+ 
     }
     func sendResponseWithUrl(_ attacmentUrl:String){
         
-        AppRestClient.sharedInstance.sendResponse(challengerID, comment: txtViewContent.text, photoUrl: attacmentUrl, isResonse: true) { (success, error) -> () in
-            if (success != nil){
+        AppRestClient.sharedInstance.sendReplyRepsone(challengerID, comment: txtViewContent.text, photoUrl: attacmentUrl, isResonse: true) { (success, error) -> () in
+            if (success){
                 if(self.delegate != nil){
                     self.delegate!.willReloadDataSource()
                 }
-                self.navigationController?.popViewController(animated: true)
+                _ = self.navigationController?.popViewController(animated: true)
             }else{
                 self.showDialog("", contentStr: "Send response failured. ")
             }

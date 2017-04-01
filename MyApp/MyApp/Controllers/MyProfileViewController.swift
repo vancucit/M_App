@@ -30,10 +30,19 @@ class MyProfileViewController: BaseKeyboardViewController, UIActionSheetDelegate
         if(isShowMenuHome){
             self.showMenuButton()
         }else{
-            self.setLeftNavigationWithTitle("Back", action: "closeTouched:")
+            self.setLeftNavigationWithTitle("Back", action: #selector(MyProfileViewController.closeTouched(_:)))
         }
-        self.setRigtNavigationWithTitle("Save", action: "saveProfile:")
+        self.setRigtNavigationWithTitle("Save", action: #selector(MyProfileViewController.saveProfile(_:)))
         updateUI()
+        self.setTitleNavigationBar("My Profile")
+        
+        
+//        txtViewBio
+        
+        txtViewBio.layer.borderColor = UIColor.gray.cgColor
+        txtViewBio.layer.borderWidth = 1.0
+        txtViewBio.layer.cornerRadius = 3.0
+        txtViewBio.clipsToBounds = true
     }
     @IBAction func dissmissTaped(_ sender: AnyObject) {
         self.view.endEditing(true)
@@ -45,13 +54,16 @@ class MyProfileViewController: BaseKeyboardViewController, UIActionSheetDelegate
 
     }
     func updateUI(){
-        let user = AuthToken.sharedInstance.currentUser
-        txtUserName.text = user!.nameUser
+        let user = User.shareInstance
+        txtUserName.text = user.nameUser
         
-        let userUrl = URL(string: user!.avatar)
-        imgAvatar.sd_setImage(with: userUrl, placeholderImage: UIImage(named: "img_avatar_holder"))
-        txtViewBio.text = user!.bio
-        switchPublic.isSelected = user!.isPublic
+        if let userAvatarStr = user.getAvatarUrl() {
+            let userUrl = URL(string: userAvatarStr)
+            imgAvatar.sd_setImage(with: userUrl, placeholderImage: UIImage(named: "img_avatar_holder"))
+        }
+        
+        txtViewBio.text = user.bio
+        switchPublic.isSelected = user.isPublic
 //        if(user.isPubl)
     }
     
@@ -64,10 +76,9 @@ class MyProfileViewController: BaseKeyboardViewController, UIActionSheetDelegate
             self.view.endEditing(true)
             if(dataImageUpload != nil){
                 let path = NSTemporaryDirectory() + "temp_avatar.jpeg"
-                var urlFile = URL(fileURLWithPath: path)
                 
-                AppRestClient.sharedInstance.uploadFile(dataImageUpload!, progress: { (percentage) -> () in
-                    print("------")
+                AppRestClient.sharedInstance.uploadFileNew(dataImageUpload!, progress: { (percentage) -> () in
+                    print("------ \(percentage)")
                 }, callback: { (urlImage, error) -> () in
                     if(urlImage != nil){
                         self.savedProfile(urlImage!)
@@ -76,6 +87,17 @@ class MyProfileViewController: BaseKeyboardViewController, UIActionSheetDelegate
                         self.hideHudLoading()
                     }
                 })
+                
+//                AppRestClient.sharedInstance.uploadFile(dataImageUpload!, progress: { (percentage) -> () in
+//                    print("------")
+//                }, callback: { (urlImage, error) -> () in
+//                    if(urlImage != nil){
+//                        self.savedProfile(urlImage!)
+//                    }else{
+//                        self.showDialog("Error", contentStr: "Upload failed. Try again.")
+//                        self.hideHudLoading()
+//                    }
+//                })
             }else{
                 self.savedProfile(nil)
             }
@@ -92,18 +114,17 @@ class MyProfileViewController: BaseKeyboardViewController, UIActionSheetDelegate
     @IBAction func swtchPublicChange(_ sender: AnyObject) {
     }
     func savedProfile(_ avatarUrl:String?){
-        var realAvatarUrl = avatarUrl
-        if(avatarUrl == nil){
-            realAvatarUrl = AuthToken.sharedInstance.currentUser?.avatar
-        }
-        var gender:String = ""
-        var birthDate:String = ""
-        AppRestClient.sharedInstance.updateProfile(txtUserName.text!, location: "", website: "", bio: txtViewBio.text, isPublic: switchPublic.isSelected, avatarUrl: avatarUrl, gender: "", birthday: "") { (success, error) -> () in
+
+        AppRestClient.sharedInstance.updateProfile(txtViewBio.text, avatarUrl: avatarUrl) { (success, error) -> () in
             if(success){
-                AuthToken.sharedInstance.currentUser?.avatar = avatarUrl!
-                AuthToken.sharedInstance.currentUser?.nameUser = self.txtUserName.text!
-                AuthToken.sharedInstance.currentUser?.bio = self.txtViewBio.text
-                AuthToken.sharedInstance.currentUser?.isPublic = self.switchPublic.isSelected
+                if avatarUrl != nil {
+                    User.shareInstance.avatar = avatarUrl!    
+                }
+                
+                User.shareInstance.nameUser = self.txtUserName.text!
+                User.shareInstance.bio = self.txtViewBio.text
+                User.shareInstance.isPublic = self.switchPublic.isSelected
+                self.updateUI()
             }else{
                 self.showDialog("Error", contentStr: "Update profile failed. Try again.")
             }
@@ -144,11 +165,28 @@ class MyProfileViewController: BaseKeyboardViewController, UIActionSheetDelegate
         self.navigationController?.present(theImagePickerController, animated: true, completion: nil)
             
     }
+    
+    @IBAction func segnmentValueChanged(_ sender: Any) {
+        guard let segment = sender as? UISegmentedControl else {
+            return
+        }
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        let followVC = storyboard.instantiateViewController(withIdentifier: "FollowViewControllerID") as! FollowViewController;
+        
+        if segment.selectedSegmentIndex == 0 {
+            followVC.typeFollow = TypeFollowStr.FollwerType
+            
+        }else{
+            followVC.typeFollow = TypeFollowStr.FollowingType
+        }
+        self.navigationController?.pushViewController(followVC, animated: true)
+    }
     //MARK: UIImagePickerControllerDelegate
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [AnyHashable: Any]){
         print("Helllo didFinishPickingMediaWithInfo")
         picker.dismiss(animated: true, completion: nil)
-        dataImageUpload = info[UIImagePickerControllerEditedImage] as! UIImage
+        dataImageUpload = info[UIImagePickerControllerEditedImage] as? UIImage
         imgAvatar.image = dataImageUpload
         
         //save to term directory 
@@ -165,6 +203,22 @@ class MyProfileViewController: BaseKeyboardViewController, UIActionSheetDelegate
     
 
     
+    @IBAction func segmendTouched(_ sender: Any) {
+        guard let segment = sender as? UISegmentedControl else {
+            return
+        }
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+
+        let followVC = storyboard.instantiateViewController(withIdentifier: "FollowViewControllerID") as! FollowViewController;
+
+        if segment.selectedSegmentIndex == 0 {
+            followVC.typeFollow = TypeFollowStr.FollwerType
+            
+        }else{
+            followVC.typeFollow = TypeFollowStr.FollowingType
+        }
+        self.navigationController?.pushViewController(followVC, animated: true)
+    }
     //MARK - keyboard
     override func keyboardWillChangeFrameWithNotification(_ notification: Foundation.Notification, showsKeyboard: Bool) {
         if(showsKeyboard){

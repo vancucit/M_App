@@ -25,8 +25,12 @@ class NewFeedDetailViewController: BaseKeyboardViewController,UITableViewDelegat
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
     var newFeed:NewFeed? {
         didSet{
-            let response = newFeed!.getItem() as! Response
-            challenger = response.challenger!
+            if let response = newFeed!.getItem() as? Response {
+                challenger = response.challenger!
+            }else{
+                challenger = newFeed?.getItem() as! Challenge!
+            }
+            
         }
     }
     
@@ -45,19 +49,20 @@ class NewFeedDetailViewController: BaseKeyboardViewController,UITableViewDelegat
         
         // Do any additional setup after loading the view.
         self.updateUI()
+        //TODO
         loadCommenst()
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.estimatedRowHeight = 100
     
+        self.setTitleNavigationBar("Detail Challenger")
     }
 
     
     //MARK:  ui
     func updateUI(){
         txtViewContent.layer.borderColor = UIColor.gray.cgColor
-//        txtViewContent.layer.borderWidth = 1.0
-//        txtViewContent.layer.cornerRadius = 2.0
         txtViewContent.clipsToBounds = true
+        
         tableView.layer.borderColor = UIColor.gray.cgColor
         tableView.layer.borderWidth = 1.0
         tableView.layer.cornerRadius = 2.0
@@ -151,6 +156,7 @@ class NewFeedDetailViewController: BaseKeyboardViewController,UITableViewDelegat
 //    }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //
+        
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -160,7 +166,7 @@ class NewFeedDetailViewController: BaseKeyboardViewController,UITableViewDelegat
         cell.lblUserName.text = comment.user?.nameUser
         cell.lblTimeAgo.text = getDisplayDateTime(comment.postedOn!)
 
-        let userUrl = URL(string: comment.user!.avatar)
+        let userUrl = URL(string: comment.user!.getThumnailAvatar()!)
         cell.imgAvatarUser.sd_setImage(with: userUrl, placeholderImage: UIImage(named: "img_avatar_holder"))
         return cell
         //

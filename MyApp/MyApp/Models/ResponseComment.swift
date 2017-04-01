@@ -17,13 +17,17 @@ class ResponseComment: NSObject {
     
     convenience init(objDic:NSDictionary){
         self.init()
-        idComment = objDic["id"] as! String
-        commentContent = objDic["Comment"] as! String
-        let dateCreateStr = objDic["DateCreated"] as! String
+        idComment = String(objDic["id"] as! Int)
+        commentContent = objDic["comment"] as! String
+        if let dateCreateStr = objDic["createDate"] as? String{
+            postedOn = dateWithISO8601String(dateCreateStr)
+        }else{
+            postedOn = Date()
+        }
         
-        postedOn = dateWithISO8601String(dateCreateStr)
         
-        if let dicUser = objDic["User"] as? NSDictionary{
+        
+        if let dicUser = objDic["user"] as? NSDictionary{
             user = User(jsonDict: dicUser)
         }
 

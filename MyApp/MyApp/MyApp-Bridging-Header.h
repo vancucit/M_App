@@ -15,7 +15,7 @@
 @import SBPickerSelector;
 
 #import <MBProgressHUD/MBProgressHUD.h>
-#import <WindowsAzureMobileServices/WindowsAzureMobileServices.h>
+//#import <WindowsAzureMobileServices/WindowsAzureMobileServices.h>
 #import <MMDrawerController/MMDrawerController.h>
 #import <MMDrawerController/UIViewController+MMDrawerController.h>
 #import <SDWebImage/UIImageView+WebCache.h>
@@ -30,5 +30,7 @@
 #import "UIPlaceHolderTextView.h"
 #import "UIButton+ButtonWithStreckImage.h"
 #import "UILabel+UILabelDynamicHeight.h"
+#import "AsyncImageView.h"
+
 
 #endif
