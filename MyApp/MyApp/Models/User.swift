@@ -136,6 +136,9 @@ class User: NSObject,NSCoding {
         }
         if let intUser = jsonDict["id"] as? Int {
             idUser = String(intUser)
+        }else {
+            let idUserStr = jsonDict["userId"] as? Int ?? 0
+            idUser = String(idUserStr)
         }
         
 //        idUser = "2"
@@ -148,7 +151,7 @@ class User: NSObject,NSCoding {
         
         followerCount = jsonDict["followersCount"] as! Int
         followingCount = jsonDict["followingCount"] as! Int
-//        point = jsonDict["Point"] as! Int
+        point = jsonDict["score"] as? Int ?? 0
 //        currentRank = jsonDict["CurrentRank"] as! Int
 //        completedChallenges = jsonDict["CompletedChallenges"] as! Int
 //        
@@ -159,6 +162,7 @@ class User: NSObject,NSCoding {
 //        
 //        birthDate = jsonDict["Birthdate"] as? String
 //        gender = jsonDict["Gender"] as? String
+        
         if let hasFollow = jsonDict["isFollow"] as? Bool{
             isFollowing = hasFollow
         }

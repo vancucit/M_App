@@ -66,7 +66,7 @@ class LeftMenuViewController: BaseViewController , UITableViewDelegate, UITableV
     }
     func updateLeftItem(){
         
-        menuItems.append(MenuItem(title: "Home", imageURL: "ic_news", notificationNum: ""))
+        menuItems.append(MenuItem(title: "News", imageURL: "ic_news", notificationNum: ""))
         
         notificationItem = MenuItem(title: "Notifications", imageURL: "ic_notification", notificationNum: "0")
 //        followwingItem = MenuItem(title: "Followings", imageURL: "ic_followings", notificationNum: "0")
@@ -75,7 +75,7 @@ class LeftMenuViewController: BaseViewController , UITableViewDelegate, UITableV
         var followwingItem:MenuItem!
         var requestItem:MenuItem!
         
-        followwingItem = MenuItem(title: "Followings", imageURL: "ic_followings", notificationNum: "")
+        followwingItem = MenuItem(title: "Following", imageURL: "ic_followings", notificationNum: "")
         menuItems.append(followwingItem)
         
         requestItem = MenuItem(title: "Request", imageURL: "ic_followings", notificationNum: "")

@@ -222,7 +222,7 @@ class AppRestClient {
     }
     
     func follow(_ userID:String, isFollow:Bool, callback:@escaping (Bool, String?)->()){
-        var urlRequest = isFollow ? getAbsoluteUrl("api/mobile/followings/follow") :getAbsoluteUrl("api/mobile/followings/unfollow")
+        let urlRequest = isFollow ? getAbsoluteUrl("api/mobile/followings/follow") :getAbsoluteUrl("api/mobile/followings/unfollow")
         let params = ["userId": userID]  as [String:String]
 
 

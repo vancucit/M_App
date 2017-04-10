@@ -24,7 +24,7 @@ class UserScoreboardTableViewCell: UITableViewCell {
     var user:User!{
         didSet{
             lblRank.text = String(user.currentRank)
-//            lblPoints.text = String(user.point)
+            lblPoints.text = String(user.point)
             lblUserName.text = user.nameUser
             var followingStr = " following, "
             if(user.followingCount > 1){

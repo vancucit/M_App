@@ -184,7 +184,7 @@ extension AppRestClient{
         }
     }
     func getTop50Users(_ callback:@escaping ([User]?,String?) ->()){
-        let urlRequest = getAbsoluteUrl("api/users?page=0&size=100")
+        let urlRequest = getAbsoluteUrl("api/mobile/users/ranking/50")
         //"user/top50"
 //        self.addAuthToken(AuthToken.sharedInstance.authenticationToken!)
     

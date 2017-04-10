@@ -424,7 +424,7 @@ extension NewsViewController: ResponseViewDelegate{
         self.navigationController?.pushViewController(responseDetailVC, animated: true)
     }
     func willGotoCommentResponse(_ response:Response){
-        /*
+ 
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
 
         let responseDetailVC = storyboard.instantiateViewController(withIdentifier: "ResponseDetailViewControllerID") as! ResponseDetailViewController
@@ -432,8 +432,8 @@ extension NewsViewController: ResponseViewDelegate{
         responseDetailVC.isNeedShowComment = true
         
         self.navigationController?.pushViewController(responseDetailVC, animated: true)
- */
-        self.willReplyChallenge("11")
+ 
+//        self.willReplyChallenge("11")
     }
     func willGotoResponse(_ response: Response) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
