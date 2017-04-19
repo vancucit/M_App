@@ -126,14 +126,16 @@ class ChallengeView: UIView, SBPickerSelectorDelegate {
                 userImageView.layer.borderWidth = 1
                 userImageView.layer.cornerRadius = userImageView.frame.size.width / 2
                 userImageView.clipsToBounds = true
-                let imageName = user.avatar
-                AsyncImageLoader.shared().cancelLoadingImages(forTarget: user.getThumnailAvatar)
-                if let urlImage = URL(string: imageName!){
-                    userImageView.sd_setImage(with: urlImage, placeholderImage:  UIImage(named: "img_avatar_holder"))
+                if let imageName = user.avatar {
+                    AsyncImageLoader.shared().cancelLoadingImages(forTarget: user.getThumnailAvatar)
+                    if let urlImage = URL(string: imageName){
+                        userImageView.sd_setImage(with: urlImage, placeholderImage:  UIImage(named: "img_avatar_holder"))
+                    }
+                    else{
+                        userImageView.image = UIImage(named: "img_avatar_holder")
+                    }
                 }
-                else{
-                    userImageView.image = UIImage(named: "img_avatar_holder")
-                }
+                
                 
                 scrollViewUsers.addSubview(userImageView)
                 

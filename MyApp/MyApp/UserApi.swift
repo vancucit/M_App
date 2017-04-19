@@ -117,9 +117,10 @@ extension AppRestClient{
             self.handleCommonResponseWithData(result,  callBack: { (objectResopnse, isSuccess) -> () in
                 if(isSuccess == true){
                     let dictResponse = objectResopnse as! NSDictionary
-                    if let dictUser = dictResponse["User"] as? NSDictionary {
+                    if let dictUser = dictResponse["user"] as? NSDictionary {
                         let newUser = User(jsonDict: dictUser)
-                        newUser.isFollowing = dictResponse["isFollow"] as! Bool
+                        newUser.isFollowing = dictResponse["isFollow"] as? Bool ?? false
+                        newUser.currentRank = dictResponse["userRank"] as? Int ?? 0
                         callback(newUser, nil)
                     }else{
                         callback(nil, nil)
@@ -210,6 +211,8 @@ extension AppRestClient{
         var avatarStr = ""
         if(avatarUrl != nil){
             avatarStr = avatarUrl!
+        }else{
+            avatarStr = User.shareInstance.avatar!
         }
         
         let params = ["bio":bio as AnyObject, "avatar":avatarStr as AnyObject] as [String:Any]

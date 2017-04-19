@@ -52,16 +52,15 @@ class UserProfileViewController: BaseViewController {
         if (self.user != nil){
             self.updateUIUser()
         }
-        self.delay(0.2, closure: { () -> () in
+        self.delay(0.1, closure: { () -> () in
             if(self.idUser != nil){
                 self.showHudWithString("")
                 AppRestClient.sharedInstance.getUser(self.idUser!, callback: { (userLoad, error) -> () in
                     if(userLoad != nil){
                         self.user = userLoad
                         self.updateUIUser()
-//                        self.getResponseImage(0)
                     }else{
-//                        self.showGeneralDialog()
+                        self.showGeneralDialog()
                     }
                     self.hideHudLoading()
                 })

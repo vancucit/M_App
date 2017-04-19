@@ -155,7 +155,7 @@ class User: NSObject,NSCoding {
 //        currentRank = jsonDict["CurrentRank"] as! Int
 //        completedChallenges = jsonDict["CompletedChallenges"] as! Int
 //        
-//        bio = jsonDict["Bio"] as? String
+        bio = jsonDict["bio"] as? String
 //        location = jsonDict["Location"] as? String
 //        webSite = jsonDict["Website"] as? String
 //        isPublic = jsonDict["IsPublic"] as! Bool
