@@ -75,6 +75,11 @@ class ResponseView: UIView, SBPickerSelectorDelegate  {
         btnShare.cornerButton()
         originalBtn.cornerButton()
     }
+    var originalHidden = false{
+        didSet{
+            originalBtn.isHidden = originalHidden
+        }
+    }
     var response:Response!{
         didSet{
             if let urlStr  = response!.user!.getThumnailAvatar(){

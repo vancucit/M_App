@@ -49,6 +49,7 @@ class ChallengeView: UIView, SBPickerSelectorDelegate {
         }
     }
     
+    
     var isDetailView = false{
         didSet{
             if isDetailView{

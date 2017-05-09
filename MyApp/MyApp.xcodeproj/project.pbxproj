@@ -16,6 +16,7 @@
 		C00BA0CD1B8C52FF00818E73 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C00BA0CC1B8C52FF00818E73 /* FBSDKShareKit.framework */; };
 		C00BA0D31B8C573600818E73 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C00BA0D21B8C573600818E73 /* FBSDKCoreKit.framework */; };
 		C00BDA531B3BB3C4006245A6 /* BadgeCount.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00BDA521B3BB3C4006245A6 /* BadgeCount.swift */; };
+		C01EC90B1EBC7237007F197E /* SegmentedControlTouched.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01EC90A1EBC7237007F197E /* SegmentedControlTouched.swift */; };
 		C01F5D411B8D5EBD000A920F /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C01F5D401B8D5EBD000A920F /* FBSDKLoginKit.framework */; };
 		C04076C61B024CD00011E752 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C04076C41B024CD00011E752 /* Bolts.framework */; };
 		C048627B1E33228C008C42B9 /* UILabel+UILabelDynamicHeight.m in Sources */ = {isa = PBXBuildFile; fileRef = C048627A1E33228C008C42B9 /* UILabel+UILabelDynamicHeight.m */; };
@@ -189,6 +190,7 @@
 		C00BA0D01B8C55C000818E73 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = "Pods/../build/Debug-iphoneos/FBSDKCoreKit.framework"; sourceTree = "<group>"; };
 		C00BA0D21B8C573600818E73 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = "Pods/../build/Debug-iphoneos/FBSDKCoreKit.framework"; sourceTree = "<group>"; };
 		C00BDA521B3BB3C4006245A6 /* BadgeCount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BadgeCount.swift; path = Models/BadgeCount.swift; sourceTree = "<group>"; };
+		C01EC90A1EBC7237007F197E /* SegmentedControlTouched.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SegmentedControlTouched.swift; path = Views/SegmentedControlTouched.swift; sourceTree = "<group>"; };
 		C01F5D401B8D5EBD000A920F /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = "Pods/../build/Debug-iphoneos/FBSDKLoginKit.framework"; sourceTree = "<group>"; };
 		C04076C41B024CD00011E752 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bolts.framework; path = "Pods/../build/Debug-iphoneos/Pods-MyApp/Bolts.framework"; sourceTree = "<group>"; };
 		C04076C51B024CD00011E752 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = "Pods/../build/Debug-iphoneos/Pods-MyApp/FBSDKCoreKit.framework"; sourceTree = "<group>"; };
@@ -428,6 +430,14 @@
 				C00B916F1B14725900B758FC /* UserTableViewCell.swift */,
 			);
 			name = ListUserLike;
+			sourceTree = "<group>";
+		};
+		C01EC9091EBC720D007F197E /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				C01EC90A1EBC7237007F197E /* SegmentedControlTouched.swift */,
+			);
+			name = Views;
 			sourceTree = "<group>";
 		};
 		C04DE4BF1ADD4DF00097305A /* News */ = {
@@ -701,6 +711,7 @@
 		C0D586D91AD36BC00015AAF7 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				C01EC9091EBC720D007F197E /* Views */,
 				C090DCE11E261BA8000FA277 /* Storyboard */,
 				C097F5E31E091CC5001850EA /* API */,
 				C08261771AE39312004D1423 /* Extension */,
@@ -1088,6 +1099,7 @@
 				C0D587501AD376A00015AAF7 /* LoginViewController.swift in Sources */,
 				C0CBD34B1AEF2FC0004D1D6C /* CompletedResponseViewController.swift in Sources */,
 				C0D586B71AD36B6D0015AAF7 /* MyApp.xcdatamodeld in Sources */,
+				C01EC90B1EBC7237007F197E /* SegmentedControlTouched.swift in Sources */,
 				C0D8B4491AF26D4600B0A361 /* GlobalContants.swift in Sources */,
 				C04DE4C41ADD4E280097305A /* LeftMenuTableViewCell.swift in Sources */,
 				C0D587601AD3880E0015AAF7 /* User.swift in Sources */,

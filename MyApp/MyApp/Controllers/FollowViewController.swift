@@ -25,17 +25,20 @@ class FollowViewController: BaseViewController,UITableViewDelegate, UITableViewD
     var hasLoadMore = true
     var isLoading = false
     
+    var currentUserID:String?
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         
         if (typeFollow == .RequestType){
-            typeFollowSegment.selectedSegmentIndex = 0
+//            typeFollowSegment.selectedSegmentIndex = 0
+            
         }else if(typeFollow == .FollwerType){
-            typeFollowSegment.selectedSegmentIndex = 1
+            typeFollowSegment.selectedSegmentIndex = 0
         }else{
-            typeFollowSegment.selectedSegmentIndex = 2
+            typeFollowSegment.selectedSegmentIndex = 1
         }
 //        self.showMenuButton()
 
@@ -59,6 +62,9 @@ class FollowViewController: BaseViewController,UITableViewDelegate, UITableViewD
         if(!hasLoadMore || isLoading){
             return
         }
+        
+        let userID = self.currentUserID ?? User.shareInstance.idUser
+        
         isLoading = true
         self.showHudLoadingInView(tableView)
 
@@ -84,7 +90,7 @@ class FollowViewController: BaseViewController,UITableViewDelegate, UITableViewD
                 following = false
             }
             
-            AppRestClient.sharedInstance.getFollows(User.shareInstance.idUser, page:currentPageIndex, keyword:"", getFollowing:following,  callback: { (usersLoad, error) -> () in
+            AppRestClient.sharedInstance.getFollows(userID, page:currentPageIndex, keyword:"", getFollowing:following,  callback: { (usersLoad, error) -> () in
                 //
                 if (usersLoad != nil){
                     self.currentPageIndex += 1
@@ -102,13 +108,13 @@ class FollowViewController: BaseViewController,UITableViewDelegate, UITableViewD
     @IBAction func segmentValueChanged(_ sender: AnyObject) {
     
         switch typeFollowSegment.selectedSegmentIndex{
+//        case 0:
+//            typeFollow = .RequestType
+//            break
         case 0:
-            typeFollow = .RequestType
-            break
-        case 1:
             typeFollow = .FollwerType
             break
-        case 2:
+        case 1:
             typeFollow = .FollowingType
             break
         default:

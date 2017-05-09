@@ -75,10 +75,7 @@ class MyProfileViewController: BaseKeyboardViewController, UIActionSheetDelegate
             self.showHudWithString("")
             self.view.endEditing(true)
             if(dataImageUpload != nil){
-                let path = NSTemporaryDirectory() + "temp_avatar.jpeg"
-                
                 AppRestClient.sharedInstance.uploadFileNew(dataImageUpload!, progress: { (percentage) -> () in
-                    print("------ \(percentage)")
                 }, callback: { (urlImage, error) -> () in
                     if(urlImage != nil){
                         self.savedProfile(urlImage!)
@@ -209,7 +206,7 @@ class MyProfileViewController: BaseKeyboardViewController, UIActionSheetDelegate
         }
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
 
-        let followVC = storyboard.instantiateViewController(withIdentifier: "FollowViewControllerID") as! FollowViewController;
+        let followVC = storyboard.instantiateViewController(withIdentifier: "FollowViewControllerID") as! FollowViewController
 
         if segment.selectedSegmentIndex == 0 {
             followVC.typeFollow = TypeFollowStr.FollwerType

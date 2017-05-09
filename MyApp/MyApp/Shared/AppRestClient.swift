@@ -587,7 +587,7 @@ class AppRestClient {
                     let arrDict = objectResopnse as! [NSDictionary]
                     var responses = [ResponseComment]()
                     for dicComment  in arrDict{
-                        var newComment = ResponseComment(objDic: dicComment)
+                        let newComment = ResponseComment(objDic: dicComment)
                         responses.append(newComment)
                     }
                     callback(responses, nil)

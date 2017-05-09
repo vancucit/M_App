@@ -95,29 +95,31 @@ class UserProfileViewController: BaseViewController {
             self.setTitleNavigationBar(user!.nameUser + "'s profile")
             updateFollowState()
         }
-        if(user!.isPublic){
+//        if(user!.isPublic){
             if(user!.bio != nil && user!.bio!.characters.count > 0){
                 btnBio.setTitle(user!.bio!, for: UIControlState())
-            }else{
-                imgBio.isHidden = true
-                btnBio.isHidden = true
-                verticalBtnBioViewLine.constant = -30
-            }
+        }
+//            }else{
+//                imgBio.isHidden = true
+//                btnBio.isHidden = true
+//                verticalBtnBioViewLine.constant = -30
+//            }
             
             btnScore.setTitle(String(user!.point), for: UIControlState())
             btnRank.setTitle(String(user!.currentRank), for: UIControlState())
             btnListCheck.setTitle(String(user!.completedChallenges), for: UIControlState())
             
-        }else{
-            imgScore.isHidden = true
-            btnScore.isHidden = true
-            imgRank.isHidden = true
-            btnRank.isHidden = true
-            imgListCheck.isHidden = true
-            btnListCheck.isHidden = true
-            imgBio.isHidden = true
-            btnBio.isHidden = true
-        }
+//        }else{
+//            imgScore.isHidden = true
+//            btnScore.isHidden = true
+//            imgRank.isHidden = true
+//            btnRank.isHidden = true
+//            imgListCheck.isHidden = true
+//            btnListCheck.isHidden = true
+//            imgBio.isHidden = true
+//            btnBio.isHidden = true
+//        }
+                
     }
     func imageTouched(_ sender:AnyObject){
      
@@ -202,6 +204,28 @@ class UserProfileViewController: BaseViewController {
             
         }
     }
+    
+    @IBAction func segnmentValueChanged(_ sender: Any) {
+        guard let segment = sender as? UISegmentedControl else {
+            return
+        }
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        let followVC = storyboard.instantiateViewController(withIdentifier: "FollowViewControllerID") as! FollowViewController
+        
+        if segment.selectedSegmentIndex == 0 {
+            followVC.typeFollow = TypeFollowStr.FollwerType
+            
+        }else{
+            followVC.typeFollow = TypeFollowStr.FollowingType
+        }
+        
+        followVC.currentUserID = self.idUser
+        
+        self.navigationController?.pushViewController(followVC, animated: true)
+    }
+    
+    
     func updateScrollView(){
         var i = 0
         //update infor scroll view

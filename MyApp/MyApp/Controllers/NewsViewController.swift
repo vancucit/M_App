@@ -532,6 +532,7 @@ extension NewsViewController{
             
             //            cell.challengeView.challenge = responsOjb.challenger
             cell.responseView.response = responsOjb
+            cell.responseView.originalHidden = true
         }else{
             //
             //            if indexPath.row >= newFeeds.count {
@@ -548,6 +549,7 @@ extension NewsViewController{
             
             //            cell.challengeView.challenge = responsOjb.challenger
             cell.responseView.response = responsOjb
+            cell.responseView.originalHidden = true
             cell.challengeView.challenge = responsOjb.challenger
             cell.challengeView.isHeaderView = true
             
