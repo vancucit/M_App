@@ -16,6 +16,7 @@
 		C00BA0CD1B8C52FF00818E73 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C00BA0CC1B8C52FF00818E73 /* FBSDKShareKit.framework */; };
 		C00BA0D31B8C573600818E73 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C00BA0D21B8C573600818E73 /* FBSDKCoreKit.framework */; };
 		C00BDA531B3BB3C4006245A6 /* BadgeCount.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00BDA521B3BB3C4006245A6 /* BadgeCount.swift */; };
+		C0198FD81EC2A5B300103848 /* _ealFriendTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0198FD71EC2A5B300103848 /* _ealFriendTests.swift */; };
 		C01EC90B1EBC7237007F197E /* SegmentedControlTouched.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01EC90A1EBC7237007F197E /* SegmentedControlTouched.swift */; };
 		C01F5D411B8D5EBD000A920F /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C01F5D401B8D5EBD000A920F /* FBSDKLoginKit.framework */; };
 		C04076C61B024CD00011E752 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C04076C41B024CD00011E752 /* Bolts.framework */; };
@@ -174,6 +175,16 @@
 		C0F8AD3E1ADCB4DD005E7352 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F8AD3D1ADCB4DD005E7352 /* Configuration.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		C0198FDA1EC2A5B300103848 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C0D586A61AD36B6D0015AAF7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C0D586AD1AD36B6D0015AAF7;
+			remoteInfo = MyApp;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		0ACCEFA62D89F4E19815F334 /* Pods-MyAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyAppTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MyAppTests/Pods-MyAppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		1CFA6545FF5C5A6710685E45 /* Pods-MyAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyAppTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MyAppTests/Pods-MyAppTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -190,6 +201,9 @@
 		C00BA0D01B8C55C000818E73 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = "Pods/../build/Debug-iphoneos/FBSDKCoreKit.framework"; sourceTree = "<group>"; };
 		C00BA0D21B8C573600818E73 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = "Pods/../build/Debug-iphoneos/FBSDKCoreKit.framework"; sourceTree = "<group>"; };
 		C00BDA521B3BB3C4006245A6 /* BadgeCount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BadgeCount.swift; path = Models/BadgeCount.swift; sourceTree = "<group>"; };
+		C0198FD51EC2A5B300103848 /* ЯealFriendTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ЯealFriendTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C0198FD71EC2A5B300103848 /* _ealFriendTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = _ealFriendTests.swift; sourceTree = "<group>"; };
+		C0198FD91EC2A5B300103848 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C01EC90A1EBC7237007F197E /* SegmentedControlTouched.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SegmentedControlTouched.swift; path = Views/SegmentedControlTouched.swift; sourceTree = "<group>"; };
 		C01F5D401B8D5EBD000A920F /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = "Pods/../build/Debug-iphoneos/FBSDKLoginKit.framework"; sourceTree = "<group>"; };
 		C04076C41B024CD00011E752 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bolts.framework; path = "Pods/../build/Debug-iphoneos/Pods-MyApp/Bolts.framework"; sourceTree = "<group>"; };
@@ -370,6 +384,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		C0198FD21EC2A5B300103848 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C0D586AB1AD36B6D0015AAF7 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -430,6 +451,15 @@
 				C00B916F1B14725900B758FC /* UserTableViewCell.swift */,
 			);
 			name = ListUserLike;
+			sourceTree = "<group>";
+		};
+		C0198FD61EC2A5B300103848 /* ЯealFriendTests */ = {
+			isa = PBXGroup;
+			children = (
+				C0198FD71EC2A5B300103848 /* _ealFriendTests.swift */,
+				C0198FD91EC2A5B300103848 /* Info.plist */,
+			);
+			path = "ЯealFriendTests";
 			sourceTree = "<group>";
 		};
 		C01EC9091EBC720D007F197E /* Views */ = {
@@ -654,6 +684,7 @@
 				C0D49F031E6FD6420018F5A7 /* GoogleService-Info.plist */,
 				C0D586B01AD36B6D0015AAF7 /* MyApp */,
 				C0D586C91AD36B6D0015AAF7 /* MyAppTests */,
+				C0198FD61EC2A5B300103848 /* ЯealFriendTests */,
 				C0D586AF1AD36B6D0015AAF7 /* Products */,
 				1DBCC6E1DD8D21C30B899998 /* Frameworks */,
 				D61CCEE1C9AD2E231B9D541C /* Pods */,
@@ -664,6 +695,7 @@
 			isa = PBXGroup;
 			children = (
 				C0D586AE1AD36B6D0015AAF7 /* ЯealFriend.app */,
+				C0198FD51EC2A5B300103848 /* ЯealFriendTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -881,6 +913,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		C0198FD41EC2A5B300103848 /* ЯealFriendTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C0198FDE1EC2A5B300103848 /* Build configuration list for PBXNativeTarget "ЯealFriendTests" */;
+			buildPhases = (
+				C0198FD11EC2A5B300103848 /* Sources */,
+				C0198FD21EC2A5B300103848 /* Frameworks */,
+				C0198FD31EC2A5B300103848 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C0198FDB1EC2A5B300103848 /* PBXTargetDependency */,
+			);
+			name = "ЯealFriendTests";
+			productName = "ЯealFriendTests";
+			productReference = C0198FD51EC2A5B300103848 /* ЯealFriendTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		C0D586AD1AD36B6D0015AAF7 /* MyApp */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C0D586D01AD36B6D0015AAF7 /* Build configuration list for PBXNativeTarget "MyApp" */;
@@ -908,10 +958,16 @@
 		C0D586A61AD36B6D0015AAF7 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0700;
+				LastSwiftUpdateCheck = 0830;
 				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = Kuccu;
 				TargetAttributes = {
+					C0198FD41EC2A5B300103848 = {
+						CreatedOnToolsVersion = 8.3.1;
+						DevelopmentTeam = ZK83HD7K73;
+						ProvisioningStyle = Automatic;
+						TestTargetID = C0D586AD1AD36B6D0015AAF7;
+					};
 					C0D586AD1AD36B6D0015AAF7 = {
 						CreatedOnToolsVersion = 6.2;
 						DevelopmentTeam = 3K6H8XNSG3;
@@ -934,11 +990,19 @@
 			projectRoot = "";
 			targets = (
 				C0D586AD1AD36B6D0015AAF7 /* MyApp */,
+				C0198FD41EC2A5B300103848 /* ЯealFriendTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		C0198FD31EC2A5B300103848 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C0D586AC1AD36B6D0015AAF7 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1089,6 +1153,14 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		C0198FD11EC2A5B300103848 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C0198FD81EC2A5B300103848 /* _ealFriendTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C0D586AA1AD36B6D0015AAF7 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1169,6 +1241,14 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		C0198FDB1EC2A5B300103848 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C0D586AD1AD36B6D0015AAF7 /* MyApp */;
+			targetProxy = C0198FDA1EC2A5B300103848 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		C090DCDE1E261B9B000FA277 /* SendMessage.storyboard */ = {
 			isa = PBXVariantGroup;
@@ -1213,6 +1293,45 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		C0198FDC1EC2A5B300103848 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = ZK83HD7K73;
+				INFOPLIST_FILE = "ЯealFriendTests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.cuc-nguyen.-ealFriendTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ЯealFriend.app/ЯealFriend";
+			};
+			name = Debug;
+		};
+		C0198FDD1EC2A5B300103848 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = ZK83HD7K73;
+				INFOPLIST_FILE = "ЯealFriendTests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.cuc-nguyen.-ealFriendTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ЯealFriend.app/ЯealFriend";
+			};
+			name = Release;
+		};
 		C0D586CE1AD36B6D0015AAF7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1361,6 +1480,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		C0198FDE1EC2A5B300103848 /* Build configuration list for PBXNativeTarget "ЯealFriendTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C0198FDC1EC2A5B300103848 /* Debug */,
+				C0198FDD1EC2A5B300103848 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		C0D586A91AD36B6D0015AAF7 /* Build configuration list for PBXProject "MyApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

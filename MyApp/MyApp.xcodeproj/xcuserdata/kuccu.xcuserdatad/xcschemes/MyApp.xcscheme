@@ -54,15 +54,16 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES">
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      codeCoverageEnabled = "YES">
       <Testables>
          <TestableReference
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "C0D586C51AD36B6D0015AAF7"
-               BuildableName = "MyAppTests.xctest"
-               BlueprintName = "MyAppTests"
+               BlueprintIdentifier = "C0198FD41EC2A5B300103848"
+               BuildableName = "&#x42f;ealFriendTests.xctest"
+               BlueprintName = "&#x42f;ealFriendTests"
                ReferencedContainer = "container:MyApp.xcodeproj">
             </BuildableReference>
          </TestableReference>
