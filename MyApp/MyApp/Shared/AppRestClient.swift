@@ -90,14 +90,14 @@ class AppRestClient {
             //                        print("Failure reason \(unwrappedData)")
             //                    }
         }else if let dataResponse = aData as? Data{
-            var errorParse:NSError?
+//            var errorParse:NSError?
             
             let json: AnyObject?
             do {
                 json = try JSONSerialization.jsonObject(with: dataResponse, options: JSONSerialization.ReadingOptions.allowFragments) as? AnyObject
                 
             } catch let error as NSError {
-                errorParse = error
+                print("Erorr :  \(error.description)")
                 json = nil
             }
             
@@ -185,10 +185,10 @@ class AppRestClient {
         request(urlRequest, method:.get, parameters: nil, headers: AppRestClient.headerRequestBear()).responseJSON(){ result in
             self.handleCommonResponseWithData(result, callBack: { (objectResopnse, isSuccess) -> () in
                 if(isSuccess == true){
-                    var arrUser = objectResopnse as! [NSDictionary]
+                    let arrUser = objectResopnse as! [NSDictionary]
                     var users = [User]()
                     for dictUser  in arrUser{
-                        var newUser = User(jsonDict: dictUser)
+                        let newUser = User(jsonDict: dictUser)
                         users.append(newUser)
                     }
                     callback(users, nil)
@@ -267,54 +267,7 @@ class AppRestClient {
 //        
 //    }
     //MARK: Challenger
-    func sendChallenge11(_ attacmentUrl:String,description:String,endDate:Int,participants:[User], isPublic:Bool, callback:@escaping (Bool,String?)->()){
-        var isPublicStr = "false"
-        if(isPublic){
-            isPublicStr = "true"
-        }
-        var arrayIDUser = [String]()
-        for user in participants {
-            arrayIDUser.append(user.idUser)
-        }
-        let token_user = "Bearer " + User.getToken()!
-        
-        let currentDate = Date()
-        let currentDateStr = shortStringFromDate(currentDate)
-        
-        let endDateStr = shortStringFromDate(currentDate + endDate.hours)
-        
-        let params = ["attachment":"http:test.com","createDate": currentDateStr!,"description":description ,"endDate":endDateStr! ,"isPublish": isPublic , "userIds":arrayIDUser ]  as [String: Any]
-        
-        let jsonData = try? JSONSerialization.data(withJSONObject: params)
-        
-        // create post request
-        let url = URL(string: getAbsoluteUrl("api/mobile/challenges"))!
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.addValue("application/json",forHTTPHeaderField: "Content-Type")
-        request.addValue("application/json",forHTTPHeaderField: "Accept")
-        request.addValue(token_user,forHTTPHeaderField: "Authorization")
-        // insert json data to the request
-        request.httpBody = jsonData
-        
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            guard let data = data, error == nil else {
-                print(error?.localizedDescription ?? "No data")
-                callback(false,error!.localizedDescription as? String)
-                return
-            }
-            let responseJSON = try? JSONSerialization.jsonObject(with: data, options: [])
-            if let responseJSON = responseJSON as? [String: Any] {
-                callback(true, nil)
-
-                print(responseJSON)
-            }
-        }
-        
-        task.resume()
-
-
-    }
+    
     func getNewFeedTest(_ pageIndex:Int, newFeedType:NewsType, keyword:String, callback:@escaping ([NewFeed]?,String?) -> ()){
         var urlCall:String!
         switch newFeedType {
@@ -347,17 +300,17 @@ class AppRestClient {
             result in
             self.handleCommonResponseWithData(result, callBack: { (objectResopnse, isSuccess) -> () in
                 if(isSuccess == true){
-                    var arrUser = objectResopnse as! [NSDictionary]
+                    let arrUser = objectResopnse as! [NSDictionary]
                     var challengers = [NewFeed]()
                     for dictUser  in arrUser{
                         
                         if(newFeedType == NewsType.NewChallenger){
                             //TODO: test
-                            var challenge = NewFeed(challenge: Challenge(jsonDict: dictUser))
+                            let challenge = NewFeed(challenge: Challenge(jsonDict: dictUser))
                             challengers.append(challenge)
                             
                         }else{
-                            var newFeed = NewFeed(response: Response(jsonDict: dictUser))
+                            let newFeed = NewFeed(response: Response(jsonDict: dictUser))
                             challengers.append(newFeed)
                         }
                     }
@@ -457,7 +410,7 @@ class AppRestClient {
     
     func rejectChallenger(_ idChallenge:String, callback:@escaping (Bool,String?) -> ()){
 //        self.addAuthToken(AuthToken.sharedInstance.authenticationToken!)
-        var urlRequest = getAbsoluteUrl("api/mobile/challenge-responses/deny?challengeId=") + idChallenge
+        let urlRequest = getAbsoluteUrl("api/mobile/challenge-responses/deny?challengeId=") + idChallenge
         request(urlRequest, method:.post, parameters: nil, headers:AppRestClient.headerRequestBear()).responseJSON(){
             result in
             self.handleCommonResponseWithData(result, callBack: { (objectResopnse, isSuccess) -> () in
@@ -689,7 +642,7 @@ class AppRestClient {
                     let arrDict = objectResopnse as! [NSDictionary]
                     var notifications = [Notification]()
                     for aDict  in arrDict{
-                        var notification = Notification(aDictMessage: aDict)
+                        let notification = Notification(aDictMessage: aDict)
                         notifications.append(notification!)
                     }
                     callback(notifications, nil)
@@ -854,7 +807,7 @@ class AppRestClient {
     func urlRequestWithComponents(_ urlString:String, parameters:NSDictionary) -> (URLRequestConvertible, Data) {
         
         // create url request to send
-        var mutableURLRequest = NSMutableURLRequest(url: URL(string: urlString)!)
+        let mutableURLRequest = NSMutableURLRequest(url: URL(string: urlString)!)
         mutableURLRequest.httpMethod = "POST"
         //let boundaryConstant = "myRandomBoundary12345"
         let boundaryConstant = "NET-POST-boundary-\(arc4random())-\(arc4random())"

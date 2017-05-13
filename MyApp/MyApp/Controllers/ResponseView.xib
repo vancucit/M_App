@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12118" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -171,11 +172,15 @@
                                 <constraint firstItem="D70-k0-HpW" firstAttribute="centerY" secondItem="dMq-Yg-Nv3" secondAttribute="centerY" id="ifo-Lk-Baa"/>
                             </constraints>
                         </view>
-                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="OxV-ZH-eKm" userLabel="imgResponse">
+                        <imageView clipsSubviews="YES" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="OxV-ZH-eKm" userLabel="imgResponse">
                             <rect key="frame" x="10" y="0.0" width="336" height="300"/>
+                            <gestureRecognizers/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="300" id="PEb-Aq-O59"/>
                             </constraints>
+                            <connections>
+                                <outletCollection property="gestureRecognizers" destination="4GG-0w-v5O" appends="YES" id="Du3-O1-v3n"/>
+                            </connections>
                         </imageView>
                     </subviews>
                     <constraints>
@@ -261,6 +266,11 @@
         <tapGestureRecognizer id="ZAQ-gB-0JB">
             <connections>
                 <action selector="responseTouched:" destination="9d1-01-Utb" id="b65-OO-Q1h"/>
+            </connections>
+        </tapGestureRecognizer>
+        <tapGestureRecognizer id="4GG-0w-v5O">
+            <connections>
+                <action selector="imageViewTouched:" destination="9d1-01-Utb" id="cRe-WC-G81"/>
             </connections>
         </tapGestureRecognizer>
     </objects>

@@ -8,7 +8,7 @@
 
 import UIKit
 
-let TIME_DAY: Int = 10
+let TIME_DAY: Int = 24
 protocol SendMessageDelegate :NSObjectProtocol{
     func didSendNewMessage()
 }
@@ -174,10 +174,10 @@ class SendMessageViewController: BaseKeyboardViewController, UITableViewDelegate
     //MARK: - UITableViewDelegate, UITableViewDatasource
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
-        var cell = tableViewUser.cellForRow(at: indexPath) as! THContactPickerTableViewCell
-        var checkboxImageView = cell.viewWithTag(104) as! UIImageView
+        let cell = tableViewUser.cellForRow(at: indexPath) as! THContactPickerTableViewCell
+        let checkboxImageView = cell.viewWithTag(104) as! UIImageView
 
-        var user = userFriends[indexPath.row]
+        let user = userFriends[indexPath.row]
         
         let indexUser = self.userSelected.index(of: user)
         if(indexUser == nil){
@@ -274,7 +274,7 @@ class SendMessageViewController: BaseKeyboardViewController, UITableViewDelegate
         if(showsKeyboard){
             let userInfo = notification.userInfo!
             if let rectKB = (userInfo[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-                var contentInsets = UIEdgeInsetsMake(0, 0, rectKB.height, 0)
+                let contentInsets = UIEdgeInsetsMake(0, 0, rectKB.height, 0)
                 scrollView.contentInset = contentInsets
                 scrollView.scrollIndicatorInsets = contentInsets
                 var rect = txtViewContent.bounds
@@ -299,7 +299,7 @@ extension SendMessageViewController: UIPickerViewDelegate, UIPickerViewDataSourc
         return pickerTimer.count
     }
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        var dicPick = pickerTimer[row]
+        let dicPick = pickerTimer[row]
 //        return "test"
         return Array(dicPick.keys)[0]
     }

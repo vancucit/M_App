@@ -8,7 +8,7 @@
 
 import UIKit
 import BTNavigationDropdownMenu
-
+import SYPhotoBrowser
 
 enum NewsType:String{
     case NewChallenger = "Request"
@@ -423,6 +423,12 @@ extension NewsViewController: ResponseViewDelegate{
         responseDetailVC.challengerID = challenger
         self.navigationController?.pushViewController(responseDetailVC, animated: true)
     }
+    func willGotoViewImageUrl(urlStr: String, caption:String) {
+        let photoBrowser = SYPhotoBrowser.init(imageSourceArray: [urlStr], caption: caption)
+        photoBrowser?.initialPageIndex = 0
+        photoBrowser?.pageControlStyle = SYPhotoBrowserPageControlStyle.system
+        self.present(photoBrowser!, animated: true, completion: nil)
+    }
     func willGotoCommentResponse(_ response:Response){
  
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -552,6 +558,8 @@ extension NewsViewController{
             cell.responseView.originalHidden = true
             cell.challengeView.challenge = responsOjb.challenger
             cell.challengeView.isHeaderView = true
+            cell.challengeView.delegate = self
+
             
         }
         //        cell.challengeView.bottomLikeCommentShare.isHidden = false

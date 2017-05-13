@@ -24,6 +24,7 @@ class SendReplyMessageViewController: BaseKeyboardViewController , UIScrollViewD
     
     var challengerID:String!
     var delegate:SendReplyMessageControllerDelegate?
+    var uploadImageURL:String?
     
     fileprivate var imagUpload:UIImage?
     
@@ -75,25 +76,31 @@ class SendReplyMessageViewController: BaseKeyboardViewController , UIScrollViewD
             self.showDialog("", contentStr: "Missing value. Try again.")
             return
         }
+        
         self.view.endEditing(true)
         self.showHudWithString("")
-//        self.sendResponseWithUrl("http://url.com")
-        
-        AppRestClient.sharedInstance.uploadFileNew(imagUpload!, progress: { (percentage) -> () in
-            print("------ \(percentage)")
+        if uploadImageURL != nil {
+            self.sendResponseWithUrl(uploadImageURL!)
+        }else{
+            AppRestClient.sharedInstance.uploadFileNew(imagUpload!, progress: { (percentage) -> () in
+                print("------ \(percentage)")
             }, callback: { (urlImage, error) -> () in
                 if(urlImage != nil){
+                    self.uploadImageURL = urlImage
                     self.sendResponseWithUrl(urlImage!)
                 }else{
                     self.showDialog("Error", contentStr: "Upload failed. Try again.")
                     self.hideHudLoading()
                 }
-        })
- 
+            })
+        }
+        
     }
     func sendResponseWithUrl(_ attacmentUrl:String){
         
         AppRestClient.sharedInstance.sendReplyRepsone(challengerID, comment: txtViewContent.text, photoUrl: attacmentUrl, isResonse: true) { (success, error) -> () in
+            self.hideHudLoading()
+
             if (success){
                 if(self.delegate != nil){
                     self.delegate!.willReloadDataSource()
@@ -102,10 +109,8 @@ class SendReplyMessageViewController: BaseKeyboardViewController , UIScrollViewD
             }else{
                 self.showDialog("", contentStr: "Send response failured. ")
             }
-            self.hideHudLoading()
         }
     }
-    //MARK: Action sheet delegate
     
    
     func showImagePickerForSourceType(_ sourceType:UIImagePickerControllerSourceType){
@@ -119,23 +124,28 @@ class SendReplyMessageViewController: BaseKeyboardViewController , UIScrollViewD
         
     }
     //MARK: UIImagePickerControllerDelegate
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [AnyHashable: Any]){
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]){
         print("Helllo didFinishPickingMediaWithInfo")
         picker.dismiss(animated: true, completion: nil)
-        imagUpload = info[UIImagePickerControllerEditedImage] as! UIImage
-        imgContentMsg.image = imagUpload!
+        guard let imagUploadForce = info[UIImagePickerControllerEditedImage] as? UIImage else{
+            print("image nill")
+            return
+        }
+        self.imagUpload = imagUploadForce
+        imgContentMsg.image = imagUploadForce
         
         //save to term directory
-        let imageToSave:Data = UIImageJPEGRepresentation(imagUpload!, 0.7)!
+        let imageToSave:Data = UIImageJPEGRepresentation(imagUploadForce, 0.7)!
         
         let path = NSTemporaryDirectory() + "temp_msg.jpeg"
         try? imageToSave.write(to: URL(fileURLWithPath: path), options: [.atomic])
-        
+
     }
     
+    
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController){
-        showImageMsg(false)
         self.dismiss(animated: true, completion: nil)
+
     }
 
     //MARK: keyboard

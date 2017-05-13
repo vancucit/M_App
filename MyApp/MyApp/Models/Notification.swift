@@ -38,7 +38,7 @@ class Notification: NSObject {
         idNotif = aDictMessage["id"] as! String
         typeNoti = aDictMessage["Type"] as! String
         markAsRead = aDictMessage["MarkAsRead"] as! Bool
-        var dicUser = aDictMessage["CreatedByUser"] as! NSDictionary
+        let dicUser = aDictMessage["CreatedByUser"] as! NSDictionary
         createdBy = User(jsonDict: dicUser)
         extraData = aDictMessage["ExtraData"] as? String
         switch typeNoti{

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SYPhotoBrowser
 
 class ResponseDetailViewController: BaseKeyboardViewController  {
     
@@ -189,8 +190,8 @@ extension ResponseDetailViewController: UITableViewDataSource, UITableViewDelega
         return 160
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell = tableView.dequeueReusableCell(withIdentifier: "ChallengeDetailTableViewCellID", for: indexPath) as! ChallengeDetailTableViewCell
-        var comment = comments[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ChallengeDetailTableViewCellID", for: indexPath) as! ChallengeDetailTableViewCell
+        let comment = comments[indexPath.row]
         cell.lblContentMsg.text = comment.commentContent
         
         print("content msg \(comment.commentContent)")
@@ -225,7 +226,13 @@ extension ResponseDetailViewController: ResponseViewDelegate{
         
         self.navigationController?.pushViewController(responseDetailVC, animated: true)
     }
-
+    
+    func willGotoViewImageUrl(urlStr: String, caption:String) {
+        let photoBrowser = SYPhotoBrowser.init(imageSourceArray: [urlStr], caption: caption)
+        photoBrowser?.initialPageIndex = 0
+        photoBrowser?.pageControlStyle = SYPhotoBrowserPageControlStyle.system
+        self.present(photoBrowser!, animated: true, completion: nil)
+    }
     //MARK: ResponseViewDelegate
     func willGoToResponseOriginal(_ challenger: String) {
         

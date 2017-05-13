@@ -149,12 +149,12 @@ class User: NSObject,NSCoding {
             avatar = avatarStr
         }
         
-        followerCount = jsonDict["followersCount"] as! Int
-        followingCount = jsonDict["followingCount"] as! Int
+        followerCount = jsonDict["followersCount"] as? Int ?? 0
+        followingCount = jsonDict["followingCount"] as? Int ?? 0
         point = jsonDict["score"] as? Int ?? 0
 //        currentRank = jsonDict["CurrentRank"] as! Int
-//        completedChallenges = jsonDict["CompletedChallenges"] as! Int
-//        
+        completedChallenges = jsonDict["challengeCount"] as? Int ?? 0
+//
         bio = jsonDict["bio"] as? String
 //        location = jsonDict["Location"] as? String
 //        webSite = jsonDict["Website"] as? String

@@ -31,6 +31,6 @@
 #import "UIButton+ButtonWithStreckImage.h"
 #import "UILabel+UILabelDynamicHeight.h"
 #import "AsyncImageView.h"
-
+#import <SYPhotoBrowser/SYPhotoBrowser.h>
 
 #endif

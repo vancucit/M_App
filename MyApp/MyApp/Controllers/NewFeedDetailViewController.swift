@@ -75,12 +75,13 @@ class NewFeedDetailViewController: BaseKeyboardViewController,UITableViewDelegat
             }
         }
         self.containChallengeView.addSubview(self.challengeView)
-        self.challengeView.snp_makeConstraints({ (make) -> Void in
+        self.challengeView.snp.makeConstraints { (make) in
             make.top.equalTo(self.containChallengeView).offset(0)
             make.left.equalTo(self.containChallengeView).offset(0)
             make.right.equalTo(self.containChallengeView).offset(0)
             make.bottom.equalTo(self.containChallengeView).offset(0)
-        })
+        }
+        
         self.challengeView.challenge = self.challenger
         self.challengeView.delegate = self
     }

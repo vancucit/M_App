@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SYPhotoBrowser
 
 class ChallengeDetailViewController: BaseLoadMoreViewController{
 
@@ -66,13 +67,13 @@ class ChallengeDetailViewController: BaseLoadMoreViewController{
     }
     
     func layoutSubviews() {
-      
-        self.challengeView.snp_makeConstraints({ (make) -> Void in
+        self.challengeView.snp.makeConstraints { (make) in
             make.top.equalTo(self.containChallengeView).offset(0)
             make.left.equalTo(self.containChallengeView).offset(0)
             make.right.equalTo(self.containChallengeView).offset(0)
             make.bottom.equalTo(self.containChallengeView).offset(0)
-        })
+        }
+        
     }
     func getResponse(){
         
@@ -135,7 +136,7 @@ extension ChallengeDetailViewController: UITableViewDataSource, UITableViewDeleg
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if self.responses.count == 0 {
             //NoResponseCellID
-            let cell = tableView.dequeueReusableCell(withIdentifier: "NoResponseCellID", for: indexPath) as! UITableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "NoResponseCellID", for: indexPath) 
             cell.textLabel?.text = "No reponse for this challenger"
             return cell
             
@@ -163,7 +164,12 @@ extension ChallengeDetailViewController: ResponseViewDelegate{
     
         
     }
-
+    func willGotoViewImageUrl(urlStr: String, caption:String) {
+        let photoBrowser = SYPhotoBrowser.init(imageSourceArray: [urlStr], caption: caption)
+        photoBrowser?.initialPageIndex = 0
+        photoBrowser?.pageControlStyle = SYPhotoBrowserPageControlStyle.system
+        self.present(photoBrowser!, animated: true, completion: nil)
+    }
     func willReloadTableView(){
         
     }

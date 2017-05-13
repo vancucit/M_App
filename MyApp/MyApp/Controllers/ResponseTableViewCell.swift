@@ -75,19 +75,31 @@ class ResponseTableViewCell: UITableViewCell {
     }
     override func layoutSubviews() {
         super.layoutSubviews()
-        self.responseView.snp_makeConstraints({ (make) -> Void in
+        self.responseView.snp.makeConstraints { (make) in
             make.top.equalTo(self.containResponseView).offset(0)
             make.left.equalTo(self.containResponseView).offset(0)
             make.right.equalTo(self.containResponseView).offset(0)
             make.bottom.equalTo(self.containResponseView).offset(0)
-        })
- 
-        self.challengeView.snp_makeConstraints({ (make) -> Void in
+        }
+//        self.responseView.snp_makeConstraints({ (make) -> Void in
+//            make.top.equalTo(self.containResponseView).offset(0)
+//            make.left.equalTo(self.containResponseView).offset(0)
+//            make.right.equalTo(self.containResponseView).offset(0)
+//            make.bottom.equalTo(self.containResponseView).offset(0)
+//        })
+        self.challengeView.snp.makeConstraints { (make) in
             make.top.equalTo(self.containChallengeView).offset(0)
             make.left.equalTo(self.containChallengeView).offset(0)
             make.right.equalTo(self.containChallengeView).offset(0)
             make.bottom.equalTo(self.containChallengeView).offset(0)
-        })
+
+        }
+//        self.challengeView.snp_makeConstraints({ (make) -> Void in
+//            make.top.equalTo(self.containChallengeView).offset(0)
+//            make.left.equalTo(self.containChallengeView).offset(0)
+//            make.right.equalTo(self.containChallengeView).offset(0)
+//            make.bottom.equalTo(self.containChallengeView).offset(0)
+//        })
  
     }
 

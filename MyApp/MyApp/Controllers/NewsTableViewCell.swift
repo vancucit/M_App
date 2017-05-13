@@ -31,6 +31,7 @@ class NewsTableViewCell: UITableViewCell {
     
     @IBOutlet weak var lblNumberResponse: UIButton!
     @IBOutlet var scrollViewUsers: UIScrollView!
+    var updateCounterTimer:Timer?
     
     var challenge:Challenge?{
         didSet{
@@ -48,7 +49,12 @@ class NewsTableViewCell: UITableViewCell {
 //            lblTime.text = shortStringFromDate(challenge!.dateCreate!)
             lblContent.text = challenge?.descriptionChallenge
             if challenge?.endDate != nil {
-                lblExpireOn.text = getDisplayDateTimeExpireOn(challenge!.endDate!)    
+                updateCounter()
+                if updateCounterTimer != nil {
+                    updateCounterTimer?.invalidate()
+                }
+                updateCounterTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateCounter), userInfo: nil, repeats: true)
+
             }
             
             
@@ -119,7 +125,17 @@ class NewsTableViewCell: UITableViewCell {
             scrollViewUsers.contentSize = CGSize( width: CGFloat(i) * 60 + 20 , height: 50)
         }
     }
-    
+    func updateCounter() {
+        if challenge?.endDate != nil {
+            //                lblExpireOn.text = getDisplayDateTimeExpireOn(challenge!.endDate!)
+            let interval = challenge!.endDate!.timeIntervalSince(Date())
+            let ti = NSInteger(interval)
+            let stopWatch = StopWatch(totalSeconds: ti)
+
+            lblExpireOn.text = getDisplayDateTimeExpireOn(challenge!.endDate!) + " - " + stopWatch.simpleTimeString
+
+        }
+    }
     func avatarUserTouched(_ sender: Any){
         let gestureObject = sender as! UITapGestureRecognizer
         let userIDTap = gestureObject.view?.tag

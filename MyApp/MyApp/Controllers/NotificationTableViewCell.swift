@@ -26,7 +26,7 @@ class NotificationTableViewCell: UITableViewCell {
                 
             }
             if(notification.typeNoti == notification.TYPE_REQUEST){
-                var challenge = notification.objectNoti as! Challenge
+                let challenge = notification.objectNoti as! Challenge
                 if challenge.endDate != nil {
                     print(" challenger date \(challenge.endDate!)")
                     lblTime.text = getDisplayDateTime(challenge.endDate!)

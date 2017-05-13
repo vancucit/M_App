@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MyProfileViewController: BaseKeyboardViewController, UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate{
+class MyProfileViewController: BaseKeyboardViewController,UIImagePickerControllerDelegate,UINavigationControllerDelegate{
 
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var imgAvatar: UIImageView!
@@ -18,6 +18,8 @@ class MyProfileViewController: BaseKeyboardViewController, UIActionSheetDelegate
     @IBOutlet weak var txtViewBio: UITextView!
     
     @IBOutlet weak var switchPublic: UISwitch!
+    
+    @IBOutlet weak var segmenedUser: SegmentedControlTouched!
     
     var isShowMenuHome = false
     
@@ -43,14 +45,48 @@ class MyProfileViewController: BaseKeyboardViewController, UIActionSheetDelegate
         txtViewBio.layer.borderWidth = 1.0
         txtViewBio.layer.cornerRadius = 3.0
         txtViewBio.clipsToBounds = true
+        self.showHudWithString("")
+        AppRestClient.sharedInstance.checkAuthentication(User.getToken()!, callback: { (sucess, error) -> () in
+            self.hideHudLoading()
+            if (sucess){
+                self.updateUI()
+            }else{
+                User.logOut()
+            }
+        })
     }
     @IBAction func dissmissTaped(_ sender: AnyObject) {
         self.view.endEditing(true)
     }
 
     @IBAction func changeAvatarTaped(_ sender: AnyObject) {
-        let actionSheet = UIActionSheet(title: NSLocalizedString("Choose action", comment: "Choose action photo"), delegate: self, cancelButtonTitle: NSLocalizedString("Cancel", comment: "CancelBtn"), destructiveButtonTitle:nil, otherButtonTitles: NSLocalizedString("UploadPhoto",comment: ""),NSLocalizedString("TakePhoto", comment: "TakePhoto btn") )
-        actionSheet.show(in: view)
+        
+        let params = Parameters(
+            title:  NSLocalizedString("Choose action", comment: ""),
+            message: "",
+            cancelButton: "Cancel",
+            otherButtons: [NSLocalizedString("UploadPhoto",comment: ""), NSLocalizedString("TakePhoto", comment: "")]
+        )
+    
+        
+        AlertHelper().showAlertWithHandler(self, parameters: params) { buttonIndex in
+            switch buttonIndex {
+            case 0:
+                print("Cancel: \(buttonIndex)")
+            case 1:
+                self.showImagePickerForSourceType(UIImagePickerControllerSourceType.photoLibrary)
+                NSLog("Photo");
+                break;
+            case 2:
+                NSLog("Camera");
+                self.showImagePickerForSourceType(UIImagePickerControllerSourceType.camera)
+                
+                break;
+            default:
+                NSLog("Default");
+                break;
+            }
+        }
 
     }
     func updateUI(){
@@ -64,10 +100,25 @@ class MyProfileViewController: BaseKeyboardViewController, UIActionSheetDelegate
         
         txtViewBio.text = user.bio
         switchPublic.isSelected = user.isPublic
+        updateTitleFollow()
 //        if(user.isPubl)
     }
     
-  
+    func updateTitleFollow(){
+        let user = User.shareInstance
+
+        var followingStr = " following"
+        if(user.followingCount > 1){
+            followingStr = " followings"
+        }
+        var followerStr = " follower"
+        if(user.followerCount > 1){
+            followerStr = " followers"
+        }
+        segmenedUser.setTitle(String(user.followerCount) + followerStr, forSegmentAt: 0)
+        segmenedUser.setTitle(String(user.followingCount) + followingStr, forSegmentAt: 1)
+        
+    }
     func saveProfile(_ sender:AnyObject!){
         if(txtUserName.text!.characters.count == 0){
             self.showDialog("Validation", contentStr: "Name is required.")
@@ -129,30 +180,7 @@ class MyProfileViewController: BaseKeyboardViewController, UIActionSheetDelegate
         }
     }
 
-    //MARK: Action sheet delegate
-    
-    func actionSheet(_ actionSheet: UIActionSheet, clickedButtonAt buttonIndex: Int)
-    {
-        switch buttonIndex{
-            
-        case 0:
-            NSLog("cancle");
-            break;
-        case 1:
-            showImagePickerForSourceType(UIImagePickerControllerSourceType.photoLibrary)
-            NSLog("Photo");
-            break;
-        case 2:
-            NSLog("Camera");
-            showImagePickerForSourceType(UIImagePickerControllerSourceType.camera)
-            
-            break;
-        default:
-            NSLog("Default");
-            break;
-            //Some code here..
-        }
-    }
+  
     func showImagePickerForSourceType(_ sourceType:UIImagePickerControllerSourceType){
         let theImagePickerController = UIImagePickerController()
         theImagePickerController.modalPresentationStyle = UIModalPresentationStyle.currentContext
@@ -180,24 +208,29 @@ class MyProfileViewController: BaseKeyboardViewController, UIActionSheetDelegate
         self.navigationController?.pushViewController(followVC, animated: true)
     }
     //MARK: UIImagePickerControllerDelegate
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [AnyHashable: Any]){
+
+  
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]){
         print("Helllo didFinishPickingMediaWithInfo")
         picker.dismiss(animated: true, completion: nil)
-        dataImageUpload = info[UIImagePickerControllerEditedImage] as? UIImage
+        guard let aDataImageUpload = info[UIImagePickerControllerEditedImage] as? UIImage else{
+            return
+        }
+        self.dataImageUpload = aDataImageUpload
         imgAvatar.image = dataImageUpload
         
-        //save to term directory 
-        let imageToSave:Data = UIImagePNGRepresentation(dataImageUpload!)!
+        //save to term directory
+        let imageToSave:Data = UIImagePNGRepresentation(aDataImageUpload)!
         
         let path = NSTemporaryDirectory() + "temp_avatar.jpeg"
         try? imageToSave.write(to: URL(fileURLWithPath: path), options: [.atomic])
-
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController){
         self.dismiss(animated: true, completion: nil)
+
     }
-    
 
     
     @IBAction func segmendTouched(_ sender: Any) {

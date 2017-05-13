@@ -17,7 +17,8 @@ protocol ResponseViewDelegate{
     func willGotoListUserLikeResponse(_ response:Response)
     func willShareResponse(_ response:Response)
     func willSetPickerDelegate(_ picker:SBPickerSelector)
-
+    
+    func willGotoViewImageUrl(urlStr:String,caption:String)
 }
 class ResponseView: UIView, SBPickerSelectorDelegate  {
     let defaultHeight:CGFloat = 600
@@ -58,7 +59,7 @@ class ResponseView: UIView, SBPickerSelectorDelegate  {
         didSet{
             if isDetailView {
 
-                (UIScreen.main.bounds.size.width/2 - 20 )
+//                (UIScreen.main.bounds.size.width/2 - 20 )
 //                widthItemConstrant.constant = (UIScreen.main.bounds.size.width/2 - 20 )
                 btnComment.isHidden = true
                 
@@ -103,7 +104,7 @@ class ResponseView: UIView, SBPickerSelectorDelegate  {
                 let urlResponse = URL(string: response!.photoUrl!)
                 imgResponse.setImageWith(urlResponse, completed: { (image, error, cachtype, urlResponse) -> Void in
                     self.imgResponse.image = image
-                    var widthImage:CGFloat = UIScreen.main.bounds.width - 20.0
+//                    var widthImage:CGFloat = UIScreen.main.bounds.width - 20.0
                     self.heightLblContentConstrant.constant =  self.lblTextRepsone.sizeOfMultiLineLabel().height
                     
                     self.heightContainResponseView.constant = 100 + self.heightImgResponse.constant + self.heightLblContentConstrant.constant
@@ -164,6 +165,13 @@ class ResponseView: UIView, SBPickerSelectorDelegate  {
     }
 
     //MARK: IBAction
+    
+    @IBAction func imageViewTouched(_ sender: Any) {
+        if(self.delegate != nil){
+            self.delegate!.willGotoViewImageUrl(urlStr: response.photoUrl!, caption: response.comment!)
+        }
+    }
+    
     @IBAction func responseTouched(_ sender: AnyObject) {
         if(self.delegate != nil){
             self.delegate?.willGotoResponse(response)
@@ -256,7 +264,7 @@ class ResponseView: UIView, SBPickerSelectorDelegate  {
     {
         print("pickerSelector intermediatelySelectedValue ")
     }
-    func pickerSelector(_ selector: SBPickerSelector!, cancelPicker cancel: Bool){
+    func pickerSelector(_ selector: SBPickerSelector, cancelPicker cancel: Bool){
         
     }
 }

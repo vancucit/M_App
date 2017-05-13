@@ -15,7 +15,7 @@ class CompletedTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        var selectionColor = UIView()
+        let selectionColor = UIView()
         selectionColor.backgroundColor = GlobalConstants.ColorConstant.DefaultSelectedColor
         self.selectedBackgroundView = selectionColor
         self.translatesAutoresizingMaskIntoConstraints = false
@@ -31,12 +31,13 @@ class CompletedTableViewCell: UITableViewCell {
     }
     override func layoutSubviews() {
         super.layoutSubviews()
-        self.containResponseView.snp_makeConstraints({ (make) -> Void in
+        self.containResponseView.snp.makeConstraints { (make) in
             make.top.equalTo(contentView).offset(0)
             make.left.equalTo(contentView).offset(0)
             make.right.equalTo(contentView).offset(0)
             make.bottom.equalTo(contentView).offset(0)
-        })
+        }
+        
     }
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)

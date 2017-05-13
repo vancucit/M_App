@@ -76,7 +76,10 @@ class ChallengeView: UIView, SBPickerSelectorDelegate {
             //            lblTime.text = getDisplayDateTime(challenge!.dateCreate!)
             lblTime.text = shortStringFromDate(challenge!.dateCreate!)
             lblContent.text = challenge?.descriptionChallenge
-            lblExpireOn.text = getDisplayDateTimeExpireOn(challenge!.endDate!)
+            let distanceTimer = challenge!.endDate!.timeIntervalSince(Date())
+            print("distance timer \(distanceTimer)")
+            lblExpireOn.text = getDisplayDateTimeExpireOn(challenge!.endDate!) + " - " + String(distanceTimer)
+            
             
             /*
              var indexTag = 0
@@ -310,11 +313,11 @@ class ChallengeView: UIView, SBPickerSelectorDelegate {
     }
 
     //when picker value is changing
-    func pickerSelector(_ selector: SBPickerSelector!, intermediatelySelectedValue value: AnyObject!, at idx: Int)
+    func pickerSelector(_ selector: SBPickerSelector!, intermediatelySelectedValue value: Any!, at idx: Int)
     {
         print("pickerSelector intermediatelySelectedValue ")
     }
-    func pickerSelector(_ selector: SBPickerSelector!, cancelPicker cancel: Bool){
+    func pickerSelector(_ selector: SBPickerSelector, cancelPicker cancel: Bool){
         
     }
     

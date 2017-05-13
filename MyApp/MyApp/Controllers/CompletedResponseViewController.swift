@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SYPhotoBrowser
 
 class CompletedResponseViewController: BaseViewController {
     
@@ -91,7 +92,12 @@ extension CompletedResponseViewController: ResponseViewDelegate{
     func willGoToResponseOriginal(_ challengerID: String) {
         
     }
-    
+    func willGotoViewImageUrl(urlStr: String, caption:String) {
+        let photoBrowser = SYPhotoBrowser.init(imageSourceArray: [urlStr], caption: caption)
+        photoBrowser?.initialPageIndex = 0
+        photoBrowser?.pageControlStyle = SYPhotoBrowserPageControlStyle.system
+        self.present(photoBrowser!, animated: true, completion: nil)
+    }
     func willGoToResponseOriginalChallenger(_ challenger:Challenge){
         let responseDetailVC = storyboard!.instantiateViewController(withIdentifier: "ChallengeDetailViewControllerID") as! ChallengeDetailViewController
         responseDetailVC.challenge = challenger
