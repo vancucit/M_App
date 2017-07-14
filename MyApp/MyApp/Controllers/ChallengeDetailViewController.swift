@@ -62,8 +62,9 @@ class ChallengeDetailViewController: BaseLoadMoreViewController{
         self.challengeView.challenge = challenge
         self.containChallengeView.addSubview(self.challengeView)
         self.layoutSubviews()
-        
-        loadCommenst()
+        self.delay(0.5) {
+            self.loadCommenst()
+        }
     }
     
     func layoutSubviews() {

@@ -49,8 +49,10 @@ class NewFeedDetailViewController: BaseKeyboardViewController,UITableViewDelegat
         
         // Do any additional setup after loading the view.
         self.updateUI()
-        //TODO
-        loadCommenst()
+        self.delay(1.0) {
+            self.loadCommenst()
+        }
+
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.estimatedRowHeight = 100
     
