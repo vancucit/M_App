@@ -237,7 +237,7 @@ class ResponseView: UIView, SBPickerSelectorDelegate  {
     
     //MARK: SBPickerSelector delegate
     //if your piker is a traditional selection
-    func pickerSelector(_ selector: SBPickerSelector!, selectedValue value: String!, index idx: Int){
+    func pickerSelector(_ selector: SBPickerSelector, selectedValue value: String, index idx: Int){
         print("pickerSelector selectedvalue")
         //        if challenge.ra
         UIApplication.shared.isNetworkActivityIndicatorVisible = true

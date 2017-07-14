@@ -144,7 +144,10 @@ class LeftMenuViewController: BaseViewController , UITableViewDelegate, UITableV
             let newVC = storyboard!.instantiateViewController(withIdentifier: "NewsViewControllerID") as! NewsViewController
             newVC.currentNewFeedType = NewsType.News
             let naVC = UINavigationController(rootViewController: newVC)
-            self.mm_drawerController.setCenterView(naVC, withCloseAnimation: true, completion: nil)
+            self.mm_drawerController.setCenterView(naVC, withCloseAnimation: true, completion: { (success) in
+                self.mm_drawerController.bouncePreview(for: .right, completion: nil)
+            })
+            
             break
        
         case 1:
@@ -196,7 +199,9 @@ class LeftMenuViewController: BaseViewController , UITableViewDelegate, UITableV
             break
             
         default:
-            self.mm_drawerController.toggle(MMDrawerSide.left, animated: true, completion: nil)
+            self.mm_drawerController.toggle(MMDrawerSide.left, animated: true, completion: { (success) in
+                self.mm_drawerController.bouncePreview(for: .left, completion: nil)
+            })
             break
         }
 

@@ -755,17 +755,17 @@ class AppRestClient {
         
 
         
-        do {
-            let urlRequest = try URLRequest(url: URL(string:getAbsoluteUrl("api/mobile/file-stores"))!, method: .post, headers:AppRestClient.headerRequestBear())
-            
-            let fileURL = URL(fileURLWithPath: "")
-            //        Alamofire.uploa
-            Alamofire.upload(fileURL, with: urlRequest).validate().responseData { response in
-                debugPrint(response)
-            }
-        } catch  {
-            print("Not valid")
-        }
+//        do {
+//            let urlRequest = try URLRequest(url: URL(string:getAbsoluteUrl("api/mobile/file-stores"))!, method: .post, headers:AppRestClient.headerRequestBear())
+//            
+//            let fileURL = URL(fileURLWithPath: "")
+//            //        Alamofire.uploa
+//            Alamofire.upload(fileURL, with: urlRequest).validate().responseData { response in
+//                debugPrint(response)
+//            }
+//        } catch  {
+//            print("Not valid")
+//        }
         
 //        let headers: HTTPHeaders = [ "auth-token": "(your auth token)" ]
         let aURL = try! URLRequest(url: getAbsoluteUrl("api/mobile/file-stores"), method: .post, headers: AppRestClient.headerRequestBear())

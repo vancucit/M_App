@@ -76,13 +76,13 @@ class NewsViewController: BaseKeyboardViewController , NewsTableViewCellDelegate
             //add pull to refresh
             
             refreshControl = UIRefreshControl()
-            self.refreshControl.attributedTitle = NSAttributedString(string: NSLocalizedString("refresh_pull_down", comment: "refresh_pull_down"),attributes:[NSForegroundColorAttributeName:UIColor.gray,NSFontAttributeName:UIFont.systemFont(ofSize: 16)])
+            self.refreshControl.attributedTitle = NSAttributedString(string: NSLocalizedString("Pull down to refresh...", comment: ""),attributes:[NSForegroundColorAttributeName:UIColor.gray,NSFontAttributeName:UIFont.systemFont(ofSize: 16)])
             
             refreshControl.addTarget(self, action: #selector(NewsViewController.refreshDataSource(_:)), for: UIControlEvents.valueChanged)
             
             self.tableView.addSubview(refreshControl)
             self.showMenuButton()
-            self.setRightNavigationWithImage("ic_create_challenge", action: #selector(NewsViewController.createNewChallengerTouched(_:)))
+            self.setRightNavigationWithImage("ic_edit", action: #selector(NewsViewController.createNewChallengerTouched(_:)))
             
             
             delay(0.3, closure: { () -> () in
@@ -100,13 +100,13 @@ class NewsViewController: BaseKeyboardViewController , NewsTableViewCellDelegate
                 print("Did select item at index: \(indexPath)")
                 switch indexPath {
                 case 0:
-                    self?.changNavTitleToString(NewsType.News)
+                    self?.changNavTitleToString(.News)
                     break
                 case 1:
-                    self?.changNavTitleToString(NewsType.Following)
+                    self?.changNavTitleToString(.Following)
                     break
                 case 2:
-                    self?.changNavTitleToString(NewsType.NewChallenger)
+                    self?.changNavTitleToString(.NewChallenger)
                     
                     break
                 default:
@@ -116,8 +116,6 @@ class NewsViewController: BaseKeyboardViewController , NewsTableViewCellDelegate
             
 
         }
-        
-//        fatalError()
 
         
     }
@@ -341,7 +339,10 @@ class NewsViewController: BaseKeyboardViewController , NewsTableViewCellDelegate
 extension NewsViewController: UITableViewDelegate, UITableViewDataSource {
     //MARK: UITableViewDelegate Datasource
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.hideTopOption()
+//        let addVC = AddContactViewController.storyboardInstance()
+//        self.navigationController?.pushViewController(addVC!, animated: true)
+//        return
+//        self.hideTopOption()
         tableView.deselectRow(at: indexPath, animated: false)
         if (isCompletedRequest != nil){
             let response = responses[indexPath.row]

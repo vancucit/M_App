@@ -13,7 +13,6 @@ import FBSDKCoreKit
 class LoginViewController: BaseViewController {
 
 
-//    var isNeedGetConfiguration = true
     var fbloginManager = FBSDKLoginManager()
     
     override func viewDidLoad() {
@@ -26,20 +25,20 @@ class LoginViewController: BaseViewController {
         if (User.getToken() != nil){
             print(" user tokenn \(User.getToken()!)")
             self.showHudWithString("")
-            AppRestClient.sharedInstance.checkAuthentication(User.getToken()!, callback: { (sucess, error) -> () in
-                self.hideHudLoading()
+            AppRestClient.sharedInstance.checkAuthentication(User.getToken()!, callback: { [weak self] (sucess, error) -> ()  in
+                self?.hideHudLoading()
                 if (sucess){
-                    self.gotoMainScreen()
+                    self?.gotoMainScreen()
                 }else{
                     User.logOut()
-                    self.loginFaceBookTouched(self)
+                    self?.loginFaceBookTouched(self)
 
                 }
             })
         }else{
 
-            self.delay(0.5, closure: { 
-                self.loginFaceBookTouched(self)
+            self.delay(0.5, closure: { [weak self] in
+                self?.loginFaceBookTouched(self)
             })
             
         }
@@ -56,7 +55,7 @@ class LoginViewController: BaseViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    @IBAction func loginFaceBookTouched(_ sender: AnyObject) {
+    @IBAction func loginFaceBookTouched(_ sender: AnyObject?) {
         self.showHudWithString("")
         if FBSDKAccessToken.current() != nil {
             print("has login \(FBSDKAccessToken.current().tokenString)")

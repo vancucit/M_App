@@ -85,6 +85,8 @@
 		C0CBD34B1AEF2FC0004D1D6C /* CompletedResponseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0CBD34A1AEF2FC0004D1D6C /* CompletedResponseViewController.swift */; };
 		C0CBD34D1AEF3EDA004D1D6C /* ViewNib.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0CBD34C1AEF3EDA004D1D6C /* ViewNib.swift */; };
 		C0CBD34F1AEF4932004D1D6C /* NewFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0CBD34E1AEF4932004D1D6C /* NewFeed.swift */; };
+		C0CBDEFC1EC6B5A800AAA834 /* AddContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0CBDEFB1EC6B5A800AAA834 /* AddContactViewController.swift */; };
+		C0CBDEFE1EC6B5E100AAA834 /* AddContactViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C0CBDEFD1EC6B5E100AAA834 /* AddContactViewController.storyboard */; };
 		C0CDE6D81E5FCA51008ADF91 /* UILableAutoHeight.m in Sources */ = {isa = PBXBuildFile; fileRef = C0CDE6D71E5FCA51008ADF91 /* UILableAutoHeight.m */; };
 		C0CDE6DB1E5FE5F2008ADF91 /* BaseLoadMoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0CDE6DA1E5FE5F2008ADF91 /* BaseLoadMoreViewController.swift */; };
 		C0CDE6DE1E6017D3008ADF91 /* ChallengerResponseViewCellTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0CDE6DD1E6017D3008ADF91 /* ChallengerResponseViewCellTableViewCell.swift */; };
@@ -105,7 +107,6 @@
 		C0D5871B1AD372000015AAF7 /* ic_clock_w.png in Resources */ = {isa = PBXBuildFile; fileRef = C0D586E31AD371FF0015AAF7 /* ic_clock_w.png */; };
 		C0D5871C1AD372000015AAF7 /* ic_close.png in Resources */ = {isa = PBXBuildFile; fileRef = C0D586E41AD371FF0015AAF7 /* ic_close.png */; };
 		C0D5871D1AD372000015AAF7 /* ic_close_w.png in Resources */ = {isa = PBXBuildFile; fileRef = C0D586E51AD371FF0015AAF7 /* ic_close_w.png */; };
-		C0D5871E1AD372000015AAF7 /* ic_create_challenge.png in Resources */ = {isa = PBXBuildFile; fileRef = C0D586E61AD371FF0015AAF7 /* ic_create_challenge.png */; };
 		C0D5871F1AD372000015AAF7 /* ic_drawer.png in Resources */ = {isa = PBXBuildFile; fileRef = C0D586E71AD371FF0015AAF7 /* ic_drawer.png */; };
 		C0D587201AD372000015AAF7 /* ic_envelop_w.png in Resources */ = {isa = PBXBuildFile; fileRef = C0D586E81AD371FF0015AAF7 /* ic_envelop_w.png */; };
 		C0D587211AD372000015AAF7 /* ic_facebook.png in Resources */ = {isa = PBXBuildFile; fileRef = C0D586E91AD371FF0015AAF7 /* ic_facebook.png */; };
@@ -284,6 +285,8 @@
 		C0CBD34A1AEF2FC0004D1D6C /* CompletedResponseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompletedResponseViewController.swift; sourceTree = "<group>"; };
 		C0CBD34C1AEF3EDA004D1D6C /* ViewNib.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewNib.swift; path = Shared/Extension/ViewNib.swift; sourceTree = "<group>"; };
 		C0CBD34E1AEF4932004D1D6C /* NewFeed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewFeed.swift; path = Models/NewFeed.swift; sourceTree = "<group>"; };
+		C0CBDEFB1EC6B5A800AAA834 /* AddContactViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddContactViewController.swift; sourceTree = "<group>"; };
+		C0CBDEFD1EC6B5E100AAA834 /* AddContactViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = AddContactViewController.storyboard; sourceTree = "<group>"; };
 		C0CDE6D61E5FCA51008ADF91 /* UILableAutoHeight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UILableAutoHeight.h; path = Views/UILableAutoHeight.h; sourceTree = "<group>"; };
 		C0CDE6D71E5FCA51008ADF91 /* UILableAutoHeight.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UILableAutoHeight.m; path = Views/UILableAutoHeight.m; sourceTree = "<group>"; };
 		C0CDE6DA1E5FE5F2008ADF91 /* BaseLoadMoreViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseLoadMoreViewController.swift; sourceTree = "<group>"; };
@@ -309,7 +312,6 @@
 		C0D586E31AD371FF0015AAF7 /* ic_clock_w.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_clock_w.png; sourceTree = "<group>"; };
 		C0D586E41AD371FF0015AAF7 /* ic_close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_close.png; sourceTree = "<group>"; };
 		C0D586E51AD371FF0015AAF7 /* ic_close_w.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_close_w.png; sourceTree = "<group>"; };
-		C0D586E61AD371FF0015AAF7 /* ic_create_challenge.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_create_challenge.png; sourceTree = "<group>"; };
 		C0D586E71AD371FF0015AAF7 /* ic_drawer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_drawer.png; sourceTree = "<group>"; };
 		C0D586E81AD371FF0015AAF7 /* ic_envelop_w.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_envelop_w.png; sourceTree = "<group>"; };
 		C0D586E91AD371FF0015AAF7 /* ic_facebook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_facebook.png; sourceTree = "<group>"; };
@@ -537,6 +539,8 @@
 		C04DE4CD1ADD4F7A0097305A /* AddContacts */ = {
 			isa = PBXGroup;
 			children = (
+				C0CBDEFB1EC6B5A800AAA834 /* AddContactViewController.swift */,
+				C0CBDEFD1EC6B5E100AAA834 /* AddContactViewController.storyboard */,
 			);
 			name = AddContacts;
 			sourceTree = "<group>";
@@ -779,7 +783,6 @@
 				C0D586E31AD371FF0015AAF7 /* ic_clock_w.png */,
 				C0D586E41AD371FF0015AAF7 /* ic_close.png */,
 				C0D586E51AD371FF0015AAF7 /* ic_close_w.png */,
-				C0D586E61AD371FF0015AAF7 /* ic_create_challenge.png */,
 				C0D586E71AD371FF0015AAF7 /* ic_drawer.png */,
 				C0D586E81AD371FF0015AAF7 /* ic_envelop_w.png */,
 				C0D586E91AD371FF0015AAF7 /* ic_facebook.png */,
@@ -1077,7 +1080,6 @@
 				C090DCE31E261BC7000FA277 /* News.storyboard in Resources */,
 				C0D587381AD372000015AAF7 /* ic_remove.png in Resources */,
 				C0595D841AE2370400293FB2 /* icon-avatar-60x60.png in Resources */,
-				C0D5871E1AD372000015AAF7 /* ic_create_challenge.png in Resources */,
 				C0D5871D1AD372000015AAF7 /* ic_close_w.png in Resources */,
 				C0D587391AD372000015AAF7 /* ic_reply.png in Resources */,
 				C0D49F041E6FD6420018F5A7 /* GoogleService-Info.plist in Resources */,
@@ -1091,6 +1093,7 @@
 				C0D587241AD372000015AAF7 /* ic_followers.png in Resources */,
 				C0D587171AD372000015AAF7 /* ic_arrow_right.png in Resources */,
 				C04DE4E61ADD5BC60097305A /* ic_back.png in Resources */,
+				C0CBDEFE1EC6B5E100AAA834 /* AddContactViewController.storyboard in Resources */,
 				C0D587131AD372000015AAF7 /* drawer_shadow.9.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1218,6 +1221,7 @@
 				C00BDA531B3BB3C4006245A6 /* BadgeCount.swift in Sources */,
 				C0A11B8A1E5E993300A57ABC /* UIImageView+Size.m in Sources */,
 				C0595D8D1AE2370400293FB2 /* THContactPickerTableViewCell.m in Sources */,
+				C0CBDEFC1EC6B5A800AAA834 /* AddContactViewController.swift in Sources */,
 				C0D5875D1AD3851A0015AAF7 /* AppRestClient.swift in Sources */,
 				C04DE4E31ADD51BD0097305A /* UserProfileViewController.swift in Sources */,
 				C04DE4D51ADD50920097305A /* SettingViewController.swift in Sources */,

@@ -35,7 +35,7 @@ pod 'SBPickerSelector'
 
 pod 'Firebase/Core'
 pod 'Firebase/Crash'
-
+pod 'SYPhotoBrowser'
 
 pod 'SwiftDate', '~> 4.0'
 pod 'BTNavigationDropdownMenu', :git => 'https://github.com/PhamBaTho/BTNavigationDropdownMenu.git', :branch => 'swift-3.0'

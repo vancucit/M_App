@@ -10,7 +10,7 @@ import UIKit
 protocol SendReplyMessageControllerDelegate{
     func willReloadDataSource()
 }
-class SendReplyMessageViewController: BaseKeyboardViewController , UIScrollViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate{
+class SendReplyMessageViewController: BaseKeyboardViewController {
 
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var heightTopViewConstraint: NSLayoutConstraint!
@@ -34,10 +34,35 @@ class SendReplyMessageViewController: BaseKeyboardViewController , UIScrollViewD
         txtViewContent.placeholder = "Write a comment. Max 240 chracters."
         showImageMsg(false)
 
-        self.setRightNavigationWithImage("ic_send", action: "sendChallengerTouched:")
+        self.setRightNavigationWithImage("ic_send", action: #selector(SendReplyMessageViewController.sendChallengerTouched(_:)))
         
+        self.animateButton()
     }
+    
+    func animateButton(){
+        
+        
+        self.btnGallery.alpha = 1.0
+        self.btnGallery.transform =
+            CGAffineTransform(scaleX: 1.0, y: 1.0)
+        
+        self.btnCaptureCamera.alpha = 0.6
+        self.btnCaptureCamera.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
+        
+        
+        UIView.animate(withDuration: 1.0, delay: 0.2, options: [.repeat, .autoreverse, .curveEaseOut, .allowUserInteraction], animations: {
+            //
+            self.btnGallery.alpha = 0.6
+            self.btnGallery.transform =
+                CGAffineTransform(scaleX: 1.2, y: 1.2)
+            
+            self.btnCaptureCamera.alpha = 1.0
+            self.btnCaptureCamera.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
+            
+        }) { (success) in
 
+        }
+    }
    //MARK: IBAction
     
     @IBAction func cameraTouched(_ sender: AnyObject) {
@@ -64,8 +89,14 @@ class SendReplyMessageViewController: BaseKeyboardViewController , UIScrollViewD
         
         if isShow {
             heightTopViewConstraint.constant = 300
+            
+            self.btnGallery.layer.removeAllAnimations()
+            self.btnCaptureCamera.layer.removeAllAnimations()
         }else{
             heightTopViewConstraint.constant = 160
+            DispatchQueue.main.async(execute: { () -> Void in
+                self.animateButton()
+            })
         }
 
     }
@@ -123,32 +154,7 @@ class SendReplyMessageViewController: BaseKeyboardViewController , UIScrollViewD
         self.navigationController?.present(theImagePickerController, animated: true, completion: nil)
         
     }
-    //MARK: UIImagePickerControllerDelegate
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]){
-        print("Helllo didFinishPickingMediaWithInfo")
-        picker.dismiss(animated: true, completion: nil)
-        guard let imagUploadForce = info[UIImagePickerControllerEditedImage] as? UIImage else{
-            print("image nill")
-            return
-        }
-        self.imagUpload = imagUploadForce
-        imgContentMsg.image = imagUploadForce
-        
-        //save to term directory
-        let imageToSave:Data = UIImageJPEGRepresentation(imagUploadForce, 0.7)!
-        
-        let path = NSTemporaryDirectory() + "temp_msg.jpeg"
-        try? imageToSave.write(to: URL(fileURLWithPath: path), options: [.atomic])
-
-    }
-    
-    
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController){
-        self.dismiss(animated: true, completion: nil)
-
-    }
-
-    //MARK: keyboard
+        //MARK: keyboard
     override func keyboardWillChangeFrameWithNotification(_ notification: Foundation.Notification, showsKeyboard: Bool) {
         if(showsKeyboard){
             let userInfo = notification.userInfo!
@@ -166,5 +172,37 @@ class SendReplyMessageViewController: BaseKeyboardViewController , UIScrollViewD
             scrollView.scrollIndicatorInsets = UIEdgeInsets.zero
         }
     }
+
+}
+extension SendReplyMessageViewController: UIImagePickerControllerDelegate ,UINavigationControllerDelegate{
+    //MARK: UIImagePickerControllerDelegate
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]){
+        print("Helllo didFinishPickingMediaWithInfo")
+        picker.dismiss(animated: true, completion: nil)
+        guard let imagUploadForce = info[UIImagePickerControllerEditedImage] as? UIImage else{
+            print("image nill")
+            return
+        }
+        self.imagUpload = imagUploadForce
+        imgContentMsg.image = imagUploadForce
+        
+        //save to term directory
+        let imageToSave:Data = UIImageJPEGRepresentation(imagUploadForce, 0.7)!
+        
+        let path = NSTemporaryDirectory() + "temp_msg.jpeg"
+        try? imageToSave.write(to: URL(fileURLWithPath: path), options: [.atomic])
+        
+    }
+    
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController){
+        
+        self.dismiss(animated: true) {
+            self.showImageMsg(false)
+
+        }
+        
+    }
+    
 
 }

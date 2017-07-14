@@ -43,8 +43,11 @@ class BaseViewController: UIViewController {
     }
     func showHideMenu(_ sender:AnyObject){
         self.view.endEditing(true)
-        self.mm_drawerController.toggle(MMDrawerSide.left, animated: true, completion: nil)
-
+        self.mm_drawerController.toggle(.left, animated: true, completion: { (success) in
+            self.mm_drawerController.bouncePreview(for: .left, completion: nil)
+        })
+     
+        
     }
     func backTouched(_ sender:AnyObject){
         let _ = self.navigationController?.popViewController(animated: true)
@@ -155,9 +158,10 @@ class BaseViewController: UIViewController {
     }
     func setRightNavigationWithImage(_ imageName:String, action:Selector){
         let imageMenu = UIImage(named: imageName)
-        let btnHome = UIButton(frame: CGRect(x: 0, y: 0, width: 44, height: 44))
+        let btnHome = UIButton(frame: CGRect(x: 0, y: 0, width: 30, height: 44))
         btnHome.setImage(imageMenu, for: UIControlState())
         btnHome.addTarget(self, action: action, for: UIControlEvents.touchUpInside)
+        btnHome.contentMode = .center
         let barBtn = UIBarButtonItem(customView: btnHome)
 
         self.navigationItem.rightBarButtonItem = barBtn

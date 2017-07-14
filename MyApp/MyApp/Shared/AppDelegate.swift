@@ -20,12 +20,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
-        FIRApp.configure()
 //        FIRApp.configure()
 
-        FIRCrashMessage("Cause Crash button clicked")
-//        fatalError()
-//        FIRApp.configure(with: <#T##FIROptions#>)
         return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
 //        return true
     }
@@ -131,10 +127,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let navNewVC = UINavigationController(rootViewController: newVC)
         
         drawerController = MMDrawerController(center: navNewVC, leftDrawerViewController: navLeftVC)
-        
+       
         drawerController?.openDrawerGestureModeMask = .all
         drawerController?.closeDrawerGestureModeMask = .all
         self.window?.rootViewController = drawerController
+      
+        drawerController?.setDrawerVisualStateBlock({ (drawerVC, drawerSide, percentVisible) in
+            var sideDrawerVC: UIViewController?
+            if drawerSide == MMDrawerSide.left {
+                sideDrawerVC = drawerVC?.leftDrawerViewController
+            }else{
+                sideDrawerVC = drawerVC?.rightDrawerViewController
+            }
+            sideDrawerVC?.view.alpha = percentVisible
+        })
         
     }
 
